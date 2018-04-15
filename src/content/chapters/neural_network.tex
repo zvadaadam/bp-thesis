@@ -1,0 +1,92 @@
+\chapter{Neural Network}
+
+// TODO: Why ANN are awesome :)
+
+While artificial neural networks (ANN) have been around since the 1940s, it is only in the last several decades where they have become a major part of artificial intelligence.
+
+
+An artificial neural network (ANN) is mathematical model, heavily inspired by the way how biological neural networks process information in the human brain.
+In general we can view ANNs as function of f: X -> Y where X is the input to neural network and Y is aproximation of our target function.
+In general we can view ANNs as function that maps
+
+It's achived by gradule from
+
+What do the do?
+How do they do it?
+Supervised learning
+
+How its structred?
+
+While neural networks have been around since the 1940s, it is only in the last several decades where they have become a major part of artificial intelligence.
+
+
+In general we can view ANNs as function of f: X -> Y
+
+high level of versatility
+
+ANNs aim to reach high level of versatility as our brain does.
+
+In general ANNs are able to reach high level of versatility as our brain because they are aproximating
+
+Inspired by biological nervous systems, artificial neural networks (ANNs) aim at reaching their versatility through learning
+
+While neural networks have been around since the 1940s, it is only in the last several decades where they have become a major part of artificial intelligence.
+
+
+\section{Inspiration in Nature}
+
+Artificial neural network (ANN) is heavily inspired by the way how biological neural networks process information in the human brain.
+Even though our brain is extremely complex and still not fully understand, we just need to know how information is being transferred.
+The basic building block is nerve cell called \textit{neuron}. It receives, processes, and transmits information through electrical and chemical signals.
+It's estimated that an average human has 86 billion neurons *.
+
+\imagefigurelarge{nerve_cell.jpg}{Illustration of nerve cell and communication flow}
+
+\textit{Dendrites} are extensions of a nerve cell that propagate the electrochemical stimulation received from other neurons to the cell body.
+You may think of them as inputs to neuron, whereas neuron's output is called \textit{axon}, a long nerve fiber that conducts electrical impulses away from the cell body.
+The end of axon is branched to many axon terminals which can be again connected to other dendrites.
+The connection is managed by \textit{synapses} that can permit the passing of electrical signal to cell body.
+Once the cell reaches a certain threshold, an action potential will fire, sending the electrical signal down the axon to other connected neurons.
+
+\section{Artificial Neuron}
+
+Artificial neuron is a generic comuptational unit, basic building block for artificial neural network (ANN).
+It's simplified version of the biological counterpart and we are able to map parts of biological neuron with the artificial one.
+It takes \textit{n} inputs represented as a vector $x\in\mathbb{R}^n$ which correspond to dendrites.
+Generaly artificial neuron produces single output $y\in\mathbb{R}$ as biological neuron where we call it axon.
+Each neuron's input $i=1,2,\ldots, n$ has assigned weight (synapse) $w_1, w_2 \ldots w_n$, they refer to the connection strength between neurons.
+Weights and same as for synapse are the backbone of learning beacuse in training phases, they keep changing to produce wanted output.(*In this chapter, we will elaborate further.)
+Inside the artificial neuron, input vector with their weights are combined and run through an activation function producing some output $y$.
+This process is illustrated in $LINK_PRECEPRTON$.
+
+\imagefigurelarge{preceptron.png}{Illustration of nerve cell and communication flow}
+
+\section{Perceptron}
+
+Perceptron is the simplest ANN with just one neuron and since we covered the basic intuition about artificial neuron we may proceed further and take a look at how output is actually calculated.
+The equation for a perceptron can be written as
+
+\[ y = \sigma(\sum_{i=1}^N w_i \cdot x_i + b) \]
+
+where
+
+\begin{itemize}
+	\item $x$ - input vector
+	\item $y$ - predicted output
+  \item $\sigma$ - activation function
+	\item $w$ - weights
+	\item $b$ - bias
+\end{itemize}
+
+
+
+\section{Artificial Neuron Network Topology}
+
+Since we know how artificial neuron works, now it's time to talk about the network topology. Before we do, from now on
+
+
+
+\section{Artificial Neuron}
+
+Artificial neuron is generic comuptational unit which takes \textit{n} inputs and produces single output.
+Output has its own parameter and it's called \textit{weight}.

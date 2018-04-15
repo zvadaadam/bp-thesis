@@ -12,17 +12,39 @@
 % \usepackage[cp1250]{inputenc} % LaTeX source encoded as Windows-1250
 
 \usepackage{graphicx} %graphics files inclusion
-\usepackage[pdftex]{graphicx}
+%\usepackage[pdftex]{graphicx}
 \usepackage{subfig} %subfigures
 \usepackage{amsmath} %advanced maths
 \usepackage{amssymb} %additional math symbols
-
+\usepackage{biblatex}
 \usepackage{dirtree} %directory tree visualisation
 
 % % list of acronyms
 % \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
 % \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
 % \makeglossaries
+
+%\bibliographystyle{iso690}
+\bibliography{library.bib} % citace
+
+% usage: \imagefigure{filename}{description}
+\newcommand{\imagefigurefull}[3]{
+    \begin{figure}[htbp]
+    \centering
+        \includegraphics[width=#3\linewidth]{content/image/#1}
+        \caption{#2 \label{pic:#1}}
+    \end{figure}
+}
+
+
+\newcommand{\imagefigurelarge}[2]{
+    \imagefigurefull{#1}{#2}{.99}
+}
+
+
+\newcommand{\imagefigure}[2]{
+    \imagefigurefull{#1}{#2}{.6}
+}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % EDIT THIS
@@ -34,9 +56,10 @@
 \authorFN{Zvada} %author's surname
 \author{Adam Zvada} %author's name without academfic degrees
 \authorWithDegrees{Adam Zvada} %author's name with academic degrees
-\supervisor{Ing. Miroslav Skrbek PhDr.}
+\supervisor{Ing. Miroslav Skrbek Ph.D}
 \acknowledgements{THANKS}
 \abstractEN{
+	In my bachelor thesis
 	Summarize the contents and contribution of your work in a few sentences in English language.
 }
 \abstractCS{
@@ -63,9 +86,10 @@
 \chapter{Introduction to Speech Recognition}
 Introduction to Speech Recognition
 
+\chapter{TESTIK}
+TESTIK
 
-\chapter{Neural Networks}
-Neural Networks
+\input content/chapters/neural_network.tex
 
 \chapter{Recurrent Nerual Networks}
 Recurrent Nerual Networks
@@ -77,8 +101,7 @@ Connectionist temporal classification
 \chapter{Conclusion}
 
 
-\bibliographystyle{iso690}
-\bibliography{mybibliographyfile}
+\printbibliography[title={Zdroje}]
 
 \setsecnumdepth{all}
 \appendix

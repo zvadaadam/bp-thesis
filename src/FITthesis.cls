@@ -16,8 +16,8 @@
 	\def\@lang{1}
 }
 \DeclareOption{english}{
-	\AtBeginDocument{\selectlanguage{UKenglish}}
-	\PassOptionsToPackage{UKenglish}{babel}
+	\AtBeginDocument{\selectlanguage{english}}
+	\PassOptionsToPackage{english}{babel}
 	\def\@lang{0}
 }
 \DeclareOption{slovak}{
@@ -56,7 +56,7 @@
 		\RequirePackage[T1]{fontenc}
 		\RequirePackage{lmodern}
 	\else
-		\AtBeginDocument{\selectlanguage{UKenglish}}
+		\AtBeginDocument{\selectlanguage{english}}
 	\fi
 \fi
 
