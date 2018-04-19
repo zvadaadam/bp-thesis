@@ -18,6 +18,9 @@
 \usepackage{amssymb} %additional math symbols
 \usepackage{biblatex}
 \usepackage{dirtree} %directory tree visualisation
+\usepackage{algorithm} %algorithm visualisation
+\usepackage[noend]{algpseudocode}
+
 
 % % list of acronyms
 % \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
@@ -45,6 +48,8 @@
 \newcommand{\imagefigure}[2]{
     \imagefigurefull{#1}{#2}{.6}
 }
+
+\newcommand*{\pd}[3][]{\ensuremath{\frac{\partial^{#1} #2}{\partial #3}}}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % EDIT THIS
@@ -91,8 +96,8 @@ TESTIK
 
 \input content/chapters/neural_network.tex
 
-\chapter{Recurrent Nerual Networks}
-Recurrent Nerual Networks
+\input content/chapters/recurrent_neural_network.tex
+
 
 \chapter{Connectionist temporal classification}
 Connectionist temporal classification

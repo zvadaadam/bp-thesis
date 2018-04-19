@@ -1,5 +1,8 @@
 \chapter{Neural Network}
 
+
+
+
 // TODO: Why ANN are awesome :)
 
 While artificial neural networks (ANN) have been around since the 1940s, it is only in the last several decades where they have become a major part of artificial intelligence.
@@ -98,6 +101,8 @@ List of some activation function:
     where $i$ is number of output
 \end{itemize}
 
+* TODO: Activation Functions features... diferentable and non-linear*
+
 \subsection{Bias}
 
 We can think of bias as a value stored inside neuron and being used to calculate it's output.
@@ -106,16 +111,82 @@ The bias value allows the activation function to be shifted to the left or right
 
 \section{Topology of Artificial Neuron Network}
 
-Basic ANN as feedforward model is a directed graph with nodes as neurons and edges with weights representing connecet to outher neurons.
-
 \imagefigure{ann.png}{Basic topology of fully connected artificial neuron network with input vector of size 3, output vector of size 2 and two hidden layers.}
 
+Basic ANN as feedforward model is a directed graph with nodes as neurons and edges with weights representing connection to other neurons.
 ANN can be divided to three important layers as shown in Fig*.
 Yellow nodes is an input layer which takes input data, dimension of input vector has to correspond to number of input nodes.
-Hidden layer as the green nodes is most important to ANN and that is where the training happens.
-Number of hidden layer and number of neurons 
- good ratio between its size and its effectiveness.
+Hidden layer as the green nodes is most important to ANN and that is where the training and evaluation happens.
+Number of hidden layers and neurons needs to be in a good ratio between its size and its effectiveness.
+Output layer produces output vector as the prediction for given input.
 
+
+\section{Network Evaluation}
+
+Evaluation of ANN is done layer by layer.
 
 
 \section{Training}
+
+The greatest trait of ANN is ability to learn from given data and then make the best aproximate prediction.
+The aim of the learning process is to find the most optimal values for network's weights and biases while minimizing error on predicated values.
+For ANN to learn we have to introduce training data consisted of input vector which will be feeded to the network and desired output value (\texit{label}) for calculating our loss.
+This aproach is called supervised learning\footnote{\label{note1}ANN can be also trained using unsupervised learning.}.
+\newline
+
+\subsection{Loss Function}
+
+Loss function compares the prediction from ANN with the desired output and returns the error of the prediction.
+During a training ANN, the goal is to minimize given loss fucntion.
+The most common and most intuitive loss function is Mean squared Error (MSE),
+\[ \operatorname{MSE}(y, \hat{y}) = \frac{1}{n}\sum_{i=1}^n(y_i-\hat{y_i})^2. \]
+
+
+\subsection{Gradient Descent for Output Layer}
+
+
+
+\subsection{Gradient Descent for Hidden Layer}
+To achive that goal we have to minimize our loss function.
+
+
+\subsection{Backpropagation}
+
+Backpropagation algorithm is resposible for the ability to learn from given training data.
+It is an iterative algortihm which for each training data (input vector, label) from given training dataset backpropagates the error and adjust the weights and biases accordingly to get desired output.
+\newline
+Weights and baieses are updated using formula,
+\[  W_{jk}^l := W_{jk}^l - \alpha\pd{E}{W_{jk}^l} \]
+\[ b_j^l := b_j^l - \alpha\pd{E}{b_j^l} \]
+where $W_{jk}^l$ is weight with connection between unit j in layer l and unit i in layer l+1, $b_j^l$ is bias associated with unit
+i in layer l+1 and $\alpha$ is learning rate *Reference*, and \pd{E}{W_{jk}^l} or \pd{E}{b_j^l} can be interpreted as minimizing loss function with respect to given weight and bais respectively.\newline
+By applying a chain rule twice on the partial derivative of the loss function with respect to a weight we get,
+\[  \pd{E}{W_{jk}^l} = \pd{E}{a_j^l}\pd{a_j^l}{z_j^l}\pd{z_j^l}{W_{jk}^l} \]
+where $z_j^l$ is sum of weighted inputs to unit $j$ in layer $l$
+\[  z_j^l =  \sum_{k=1}^K {w_{jk}^l}{a_k^{l-1}+b_j^l}  \]
+and $a_j^l$ is output of node $j$ in layer $l$
+\[  a_j^l =  f(z_j^l)  \].
+
+
+
+The goal of backpropagation is to compute the partial derivatives  and  of the cost function C with respect to any weight w or bias b in the network
+
+
+\begin{algorithm}
+\caption{Backpropagation}\label{euclid}
+\begin{algorithmic}[1]
+\State Network evaluation for given input, computing $z^l$ and $a^l$ for each layer
+\For{\textbf{each} node $i$ in output layer $L$}
+  \State $\delta_i^L = \pd{E}{a_i^L}f'(z_i^L)$
+\EndFor
+\For{\textbf{each} layer $l = L-1, L-2, \ldots 2$}
+  \For{\textbf{each} node $j$ in layer $l$}
+    \State $\delta_j^l = \pd{E}{z_j}$
+  \EndFor
+\EndFor
+\State $\pd{E}{w_{jk}^l} = a_k^{l-1}\delta_j^l$
+\State $\pd{E}{b_j^l} = \delta_j^l$
+\State $w_{jk}^l := w_jk^l - \alpha\pd{E}{w_{jk}^l}$
+\State $b_j^l := b_j^l - \alpha\pd{E}{b_j^l}$
+\end{algorithmic}
+\end{algorithm}
