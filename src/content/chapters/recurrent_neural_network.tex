@@ -1,1 +1,25 @@
 \chapter{Recurrent Neural Network}
+
+Neural networks are powerful learning models that achieve state-of-the-art results in a wide range of machine learning tasks.
+Nevertheless, they have limitations in the field of sequential data.
+Standard ANNs rely on the assumption of independence among the training examples but if data points are related in time or space then ANNs would not be the right model for the task*Reference - arvix*.
+\newline
+Recurrent neural network (RNN) is type of neural network which is precisely designed to work with sequential data through time.
+The key difference is that RNN's neurons in hidden layer have a special edge (recurrent edge) to a next time step which can be interpreted as a loop.
+In RNN, the neuron's output is dependent on the previous computations which is sent through the recurrent edge.
+Basically, the recurrent edges or loops allow persistence of information from one time step to the next one as shown on *Figure 3.1*.
+The intuition
+
+\imagefigure{rnn_unrolled.png}{Simple RNN topology and illustration of unrolled RNN through time}
+
+
+\section{Evaluation}
+
+\section{Backpropagation through time}
+
+\section{LSTM}
+
+\section{CTC}
+
+Even though
+Recurrent Neural Network
