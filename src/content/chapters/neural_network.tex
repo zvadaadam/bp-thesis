@@ -142,35 +142,62 @@ The most common and most intuitive loss function is Mean squared Error (MSE),
 \[ \operatorname{MSE}(y, \hat{y}) = \frac{1}{n}\sum_{i=1}^n(y_i-\hat{y_i})^2. \]
 
 
-\subsection{Gradient Descent for Output Layer}
-
-
-
-\subsection{Gradient Descent for Hidden Layer}
-To achive that goal we have to minimize our loss function.
-
-
 \subsection{Backpropagation}
 
 Backpropagation algorithm is resposible for the ability to learn from given training data.
-It is an iterative algortihm which for each training data (input vector, label) from given training dataset backpropagates the error and adjust the weights and biases accordingly to get desired output.
+It is an iterative algortihm which for each training data %(input vector, label)
+from given training dataset backpropagates the error and adjust the weights and biases accordingly to get desired output.
+
+\subsubsection{Optimization}
+
+Backpropagation requires optimizer to minimize the error on the training data.
+We will describe backpropagation with using \textit{gradient descent} as the most common optimization algorithm.
 \newline
-Weights and baieses are updated using formula,
+Weights and baises are updated using formula,
 \[  W_{jk}^l := W_{jk}^l - \alpha\pd{E}{W_{jk}^l} \]
 \[ b_j^l := b_j^l - \alpha\pd{E}{b_j^l} \]
-where $W_{jk}^l$ is weight with connection between unit j in layer l and unit i in layer l+1, $b_j^l$ is bias associated with unit
-i in layer l+1 and $\alpha$ is learning rate *Reference*, and \pd{E}{W_{jk}^l} or \pd{E}{b_j^l} can be interpreted as minimizing loss function with respect to given weight and bais respectively.\newline
-By applying a chain rule twice on the partial derivative of the loss function with respect to a weight we get,
+where $\boldsymbol{W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $\boldsymbol{b_j^l}$ is bias associated with unit
+$i$ in layer $l+1$, $\boldsymbol{\alpha}$ is a learning rate *Reference*, and $\boldsymbol{\pd{E}{W_{jk}^l}}$ or $\boldsymbol{\pd{E}{b_j^l}}$ can be interpreted as minimizing loss function with respect to given weight and bias respectively.
+\par
+By applying a chain rule twice on the partial derivative of the loss function with respect to a weight, we get
 \[  \pd{E}{W_{jk}^l} = \pd{E}{a_j^l}\pd{a_j^l}{z_j^l}\pd{z_j^l}{W_{jk}^l} \]
-where $z_j^l$ is sum of weighted inputs to unit $j$ in layer $l$
-\[  z_j^l =  \sum_{k=1}^K {w_{jk}^l}{a_k^{l-1}+b_j^l}  \]
-and $a_j^l$ is output of node $j$ in layer $l$
-\[  a_j^l =  f(z_j^l)  \].
+where $\boldsymbol{z_j^l}$ is a sum of weighted inputs to unit $j$ in layer $l$
+\[  z_j^l =  b_j^l + \sum_{k=1}^K {w_{jk}^l}{a_k^{l-1}}  \]
+and $\boldsymbol{a_j^l}$ is an output of node $j$ in layer $l$
+\[  a_j^l =  f(z_j^l).  \]
+Let's calculate the last two products of equation *Reference*:
+\[  \pd{a_j^l}{z_j^l} = f'(z_j^l)  \]
+\[  \pd{z_j^l}{W_{jk}^l} = \pd{W_{jk}^{l}a_k^{l}}{W_jk^l} = a_k^{l-1}  \]
+We introduce a new varibale $\boldsymbol{\delta_j^l}$ which represents the error in unit $j$ in layer $l$ and helps us to better understand and calculate real interested value of \pd{E}{W_{jk}^l} and \pd{E}{b_j^l}.
+\[  \delta_j^l = \pd{E}{z_j^l} \]
+We will simplify the error equation on neuron $j$ in output layer $L$ as
+\[  \delta_j^L = \pd{E}{z_j^L} = \pd{E}{a_j^L}\pd{a_j^L}{z_j^L} = \pd{E}{a_j^L}f'(z_j^L)\]
+Now we have enough information to reformulate equation *reference* for output layer to
+\[ \pd{E}{W_{jk}^l} = \delta_k^{L}a_j^L. \]
+However, to be able to update weights inside the hidden layers, we have to redefine the calculation of $\delta_j^l$.
+We know that the error produced by an output neuron is just influencing the output value but inside a hidden layer the produced error propagates to all following layers.
+Therefore we have calculate the $\delta_j^l$ where layer $l$ is inside a hidden layer and take into account all $\delta^{l+1}$ from following layer $l+1$.
+\[  \delta_j^l =  \pd{E}{z_j^l} = \sum_i\pd{E}{z_i^{l+1}}\pd{z_i^{l+1}}{z_j^{l}} = \sum_i\pd{E}{z_i^{l+1}}\pd{z_i^{l+1}}{a_j^{l}}\pd{a_j^l}{z_j^l} \]
+\[  = \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l) \]
+where the sum index $i$ iterates over all neurons in layer $l+1$ and Notice that we have substituted $\pd{E}{z_i^{l+1}}$ with $\delta_i^{l+1}$ which is calculated from previous iteration.
+\newline
+Finally, we may calculate all weights adjustments through the whole network as
+\[  W_{jk}^l := W_{jk}^l - \alpha\delta_k^{l}a_j^l \]
+where
+\[ \delta_k^{l} = \pd{E}{a_j^L}f'(z_j^L), \quad l = L \]
+and
+\[ \delta_k^{l} = \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l), \quad l = 2,\ldots, L-1. \]
 
+We won't be exampling the equation for baises adjustments because it follows a similar process shown above with just little changes, resulting to equation
+\[  b_{j}^l := b_{j}^l - \alpha\delta_l^{j} \]
 
+\subsubsection{Backpropagation Algortihm}
 
-The goal of backpropagation is to compute the partial derivatives  and  of the cost function C with respect to any weight w or bias b in the network
+\clearpage
 
+Using our predefined loss function *ReferenceEquation* we will simplify the error on considered neuron,
+For example purposes, let us assume that we will use \textit{quadratic loss function},
+\[  E =  \frac{1}{2}\sum_j(y_j - a_j^l).  \]
 
 \begin{algorithm}
 \caption{Backpropagation}\label{euclid}
