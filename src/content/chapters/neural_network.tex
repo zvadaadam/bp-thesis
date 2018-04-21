@@ -1,40 +1,12 @@
 \chapter{Neural Network}
 
 
-
-
-// TODO: Why ANN are awesome :)
-
-While artificial neural networks (ANN) have been around since the 1940s, it is only in the last several decades where they have become a major part of artificial intelligence.
-
-
-An artificial neural network (ANN) is mathematical model, heavily inspired by the way how biological neural networks process information in the human brain.
-In general we can view ANNs as function of f: X -> Y where X is the input to neural network and Y is aproximation of our target function.
-In general we can view ANNs as function that maps
-
-It's achived by gradule from
-
-What do the do?
-How do they do it?
-Supervised learning
-
-How its structred?
-
-While neural networks have been around since the 1940s, it is only in the last several decades where they have become a major part of artificial intelligence.
-
-
-In general we can view ANNs as function of f: X -> Y
-
-high level of versatility
-
-ANNs aim to reach high level of versatility as our brain does.
-
-In general ANNs are able to reach high level of versatility as our brain because they are aproximating
-
-Inspired by biological nervous systems, artificial neural networks (ANNs) aim at reaching their versatility through learning
-
-While neural networks have been around since the 1940s, it is only in the last several decades where they have become a major part of artificial intelligence.
-
+Neural networks have remarkable ability to derive meaning from complicated data. They can be used to extract patterns and detect trends that are too complex to be noticed by either humans or other computer techniques.
+Even though they have been around since the 1950s, it is only in the last decade when they started to outperform robust system or even humans in specify tasks.
+However, they require a huge amount of training examples and computational power to be trained for preforming a reasonable prediction.
+Fortunately, GPUs has seen enormous increase in performance\footnote{\label{note1}WHY GPU FRO DEEP LEARNING.} and
+90\% of the data in the world today has been created in the last two years alone, at 2.5 quintillion bytes of data a day*Refrence data*.
+That's why ANN is big topic in Computer Science and in the technology industry and it currently provides the best solutions to many problems such as speech recognition, image recognition, and natural language processing.
 
 \section{Inspiration in Nature}
 
@@ -58,7 +30,7 @@ It's simplified version of the biological counterpart and we are able to map par
 It takes \textit{n} inputs represented as a vector $x\in\mathbb{R}^n$ which correspond to dendrites.
 Generaly artificial neuron produces single output $y\in\mathbb{R}$ as biological neuron where we call it axon.
 Each neuron's input $i=1,2,\ldots, n$ has assigned weight (synapse) $w_1, w_2 \ldots w_n$, they refer to the connection strength between neurons.
-Weights and same as for synapse are the backbone of learning beacuse in training phases, they keep changing to produce wanted output.(*In this chapter, we will elaborate further.)
+Weights and same as for synapse are the backbone of learning because in training phases, they keep changing to produce wanted output.(*In this chapter, we will elaborate further.)
 Inside the artificial neuron, input vector with their weights are combined and run through an activation function producing some output $y$.
 This process is illustrated in $LINK_PRECEPRTON$.
 
@@ -82,14 +54,14 @@ where
 \end{itemize}
 
 Perceptron is a basically linear classifier, therefore the data has to be linearly separable otherwise we would not be able to make the correct prediction.
-Problems such as speech recognition are not definitely linearly separable, however we can solve non-linear desicions for example by introducing another layer of neurons, thus creating \textit{Multilayered Perceptron}.
+Problems such as speech recognition are not definitely linearly separable, however we can solve non-linear decisions for example by introducing another layer of neurons, thus creating \textit{Multilayered Perceptron}.
 
 \subsection{Activation Functions}
 
 We have stated that biological neuron fires electrical signal to other connected neurons whenever it reaches a certain threshold of incoming electrical impulses.
 Activation function is based on that concept and inside an artificial neuron it is used for calculating output signal via equation*.
 It introduces non-linear properties to our ANN and without an activation function would be just a regular linear regression model.
-Nowdays many diffrent activation function are being used and their performance veries from model to model. \newline
+Nowadays many different activation function are being used and their performance varies from model to model. \newline
 \newline
 List of some activation function:
 
@@ -101,7 +73,7 @@ List of some activation function:
     where $i$ is number of output
 \end{itemize}
 
-* TODO: Activation Functions features... diferentable and non-linear*
+* TODO: Activation Functions features... differentiable and non-linear*
 
 \subsection{Bias}
 
@@ -128,24 +100,24 @@ Evaluation of ANN is done layer by layer.
 
 \section{Training}
 
-The greatest trait of ANN is ability to learn from given data and then make the best aproximate prediction.
+The greatest trait of ANN is ability to learn from given data and then make the best approximate prediction.
 The aim of the learning process is to find the most optimal values for network's weights and biases while minimizing error on predicated values.
 For ANN to learn we have to introduce training data consisted of input vector which will be feeded to the network and desired output value (\texit{label}) for calculating our loss.
-This aproach is called supervised learning\footnote{\label{note1}ANN can be also trained using unsupervised learning.}.
+This approach is called supervised learning\footnote{\label{note1}ANN can be also trained using unsupervised learning.}.
 \newline
 
 \subsection{Loss Function}
 
 Loss function compares the prediction from ANN with the desired output and returns the error of the prediction.
-During a training ANN, the goal is to minimize given loss fucntion.
+During a training ANN, the goal is to minimize given loss function.
 The most common and most intuitive loss function is Mean squared Error (MSE),
 \[ \operatorname{MSE}(y, \hat{y}) = \frac{1}{n}\sum_{i=1}^n(y_i-\hat{y_i})^2. \]
 
 
 \subsection{Backpropagation}
 
-Backpropagation algorithm is resposible for the ability to learn from given training data.
-It is an iterative algortihm which for each training data %(input vector, label)
+Backpropagation algorithm is responsible for the ability to learn from given training data.
+It is an iterative algorithm which for each training data %(input vector, label)
 from given training dataset backpropagates the error and adjust the weights and biases accordingly to get desired output.
 
 \subsubsection{Optimization}
@@ -153,7 +125,7 @@ from given training dataset backpropagates the error and adjust the weights and 
 Backpropagation requires optimizer to minimize the error on the training data.
 We will describe backpropagation with using \textit{gradient descent} as the most common optimization algorithm.
 \newline
-Weights and baises are updated using formula,
+Weights and biases are updated using formula,
 \[  W_{jk}^l := W_{jk}^l - \alpha\pd{E}{W_{jk}^l} \]
 \[ b_j^l := b_j^l - \alpha\pd{E}{b_j^l} \]
 where $\boldsymbol{W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $\boldsymbol{b_j^l}$ is bias associated with unit
@@ -188,32 +160,22 @@ where
 and
 \[ \delta_k^{l} = \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l), \quad l = 2,\ldots, L-1. \]
 
-We won't be exampling the equation for baises adjustments because it follows a similar process shown above with just little changes, resulting to equation
+We won't be exampling the equation for biases adjustments because it follows a similar process shown above with just little changes, resulting to equation
 \[  b_{j}^l := b_{j}^l - \alpha\delta_l^{j} \]
-
-\subsubsection{Backpropagation Algortihm}
 
 \clearpage
 
-Using our predefined loss function *ReferenceEquation* we will simplify the error on considered neuron,
-For example purposes, let us assume that we will use \textit{quadratic loss function},
-\[  E =  \frac{1}{2}\sum_j(y_j - a_j^l).  \]
+\subsubsection{Backpropagation Algortihm}
 
 \begin{algorithm}
 \caption{Backpropagation}\label{euclid}
 \begin{algorithmic}[1]
-\State Network evaluation for given input, computing $z^l$ and $a^l$ for each layer
-\For{\textbf{each} node $i$ in output layer $L$}
-  \State $\delta_i^L = \pd{E}{a_i^L}f'(z_i^L)$
+\State Initialize network weights and biases
+\For{\textbf{each} training data from training dataset}
+	\State Forward pass and calculate network prediction for given training input
+	\State Calculate error $\delta^L$ for output layer
+	\State Calculate errors $\delta^l$ for hidden layers
+	\State Update weights and biases using precalculated $\delta^l$
 \EndFor
-\For{\textbf{each} layer $l = L-1, L-2, \ldots 2$}
-  \For{\textbf{each} node $j$ in layer $l$}
-    \State $\delta_j^l = \pd{E}{z_j}$
-  \EndFor
-\EndFor
-\State $\pd{E}{w_{jk}^l} = a_k^{l-1}\delta_j^l$
-\State $\pd{E}{b_j^l} = \delta_j^l$
-\State $w_{jk}^l := w_jk^l - \alpha\pd{E}{w_{jk}^l}$
-\State $b_j^l := b_j^l - \alpha\pd{E}{b_j^l}$
 \end{algorithmic}
 \end{algorithm}
