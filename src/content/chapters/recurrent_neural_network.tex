@@ -3,23 +3,82 @@
 Neural networks are powerful learning models that achieve state-of-the-art results in a wide range of machine learning tasks.
 Nevertheless, they have limitations in the field of sequential data.
 Standard ANNs rely on the assumption of independence among the training examples but if data points are related in time or space then ANNs would not be the right model for the task*Reference - arvix*.
+%https://arxiv.org/pdf/1506.00019.pdf
 \newline
 Recurrent neural network (RNN) is type of neural network which is precisely designed to work with sequential data through time.
 The key difference is that RNN's neurons in hidden layer have a special edge (recurrent edge) to a next time step which can be interpreted as a loop.
 In RNN, the neuron's output is dependent on the previous computations which is sent through the recurrent edge.
 Basically, the recurrent edges or loops allow persistence of information from one time step to the next one as shown on *Figure 3.1*.
-The intuition
+%https://blog.paperspace.com/recurrent-neural-networks-part-1-2/
 
 \imagefigure{rnn_unrolled.png}{Simple RNN topology and illustration of unrolled RNN through time}
-
+%footnote{\label{rnn_unroll}Courtesy of http://www.mdpi.com/1996-1073/10/8/1168/htm}
 
 \section{Evaluation}
 
-\section{Backpropagation through time}
+In *Figure 3.1.* we may see simplification of evaluation process of RNN through the time steps.
+RNN's neuron cell in hidden layer takes two inputs, $x_t$ and $h_{t-1}$ which is value (hidden state) sent through the recurrent edge from previous time-step.
+The cell also produces two outputs, $h_t$ as hidden state for upcoming time-setp
+\[ h_t = f(W_{hx}x_t + W_{hh}h_{t-1} + b_h) \]
+where $f$ is arbitrary non-linear activation function, $W_{hx}$ is matrix of conventional weights, $W_{hh}$ is the matrix of recurrent weights and $b_h$ is a bais.
+The second output from cell is $y_t$ which outputs the predication using precalculated hidden state $h_t$,
+\[ y_t = W_{hy}h_t + b_y \]
+where $W_{hy}$ is matrix of output weights.
+
+\subsection{Softmax Fucntion}
+It is very common for RNN models to use \textit{softmax} as activation function for output layer.
+Softmax function helps to get probability distribution of outputs so it's useful for finding most probable occurrence of output with respect to other outputs.
+\[ \operatorname{softmax}(y)_j = \frac{e^{z_j}}{\sum_{k=1}^K e^{z_k}}, \quad \text{for} \ j = 1, \ldots,  K \]
+Softmax is being used for calculting output value of $y_t$ resulting to formula
+\[ y_t = \operatorname{softmax}(W_{hy}h_t + b_y). \]
+
+
+\section{Training}
+
+Training a RNN is similar to training a traditional ANN.
+We also use the backpropagation algorithm, but since the parameters are shared by all time-steps in the network, the gradient at each output depends not only on the calculations of the current time-step, but also the previous time-steps.
+%http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/
+
+
+\imagefigurelarge{rnn_error.png}{Deriving the gradients according to the back-propagation through time (BPTT) method. Notaion for output value $\epsilon(t)$ corresponds to our $y_t$.}
+%http://www.mdpi.com/2076-3417/8/4/630/htm
+
+
+
+
+\subsection{Backpropagation Through Time}
+The most used algortihm to train RNN is \textit{backpropagation through time} (BPTT), introduced by Werbos in 1990.
+%http://axon.cs.byu.edu/~martinez/classes/678%20old/backproptime.pdf
+%Paul J. Werbos. Backpropagation through time: what it does and how to do it. Proceedings of the IEEE, 78(10):1550–1560, 1990.
+BPTT is basically an extanded version of backpropagation algortihm where we not only propagate the error to all following layers but also through the hidden states.
+We may think of it as unrolling the RNN to sequence of identical ANNs where the recurrent edge connects the sequences of neurons in hidden layer together as shown on *Figure 3.1 and 3.2*.
+On *Figure 3.2* is also indicated how the errors are propagated.
+The propagation of errors through hidden states allows the RNN to learn long term time dependencies.
+The calculated gradients of the loss function for defined parameter ($W$, $b$) through the sequence of unrolled RNN are then sum up, producing the final gradient for updating the weights or baises, *Equation bottom*.
+\[ \pd{E}{W_ij^l} = \sum_{t=1}^{T}\pd{E_t}{W_ij^l} \]
+where $E$ is predefined loss function, ${W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $T$ is number of input sequences and $\pd{E_t}{W_{ij}^l}$ is calculated similarly as in backpropagation with just considering existance of recurrent edges
+\[ \pd{E_t}{W_{ij}^l} = \sum_{k=1}^{t}\pd{E_t}{y_t}\pd{y_t}{h_t}\pd{h_t}{h_k}\pd{h_k}{W_{ij}^l} \]
+To compute the $\pd{h_t}{h_k}$ we use simple chain rule over all hidden states in interval [$k$,$t$].
+\[ \pd{h_t}{h_k} = \prod_{i=k+1}^{t}\pd{h_i}{h_{i-1}} \]
+Putting equations together, we have the following relationship.
+%http://proceedings.mlr.press/v28/pascanu13.pdf
+\[  \pd{E}{W_{ij}^l} = \sum_{t=1}^{T}\sum_{j=1}^{t}\pd{E_t}{y_t}\pd{y_t}{h_t}(\prod_{i=k+1}^{t}\pd{h_i}{h_{i-1}})\pd{h_k}{W_{ij}^l} \]
+
+\subsection{Exploding and Vanishing Gradients}
+
+The problems of \textit{vanishing} and \textit{exploding gradients} occur when backpropagating errors across many time steps
+The derevatives can get big or very small.
 
 \section{LSTM}
 
+
 \section{CTC}
 
-Even though
-Recurrent Neural Network
+Conceptually, BPTT works by unrolling all input timesteps.
+Each timestep has one input timestep, one copy of the network, and one output.
+Errors are then calculated and accumulated for each timestep.
+The network is rolled back up and the weights are updated.
+
+
+Even though these networks had achieved success in learning short-range dependencies, they haven’t been showing any worth mentioning achievement with learning mid-range dependencies.
+This was mainly caused by the problems of vanishing and exploding gradients.{http://arxiv.org/abs/1506.00019}

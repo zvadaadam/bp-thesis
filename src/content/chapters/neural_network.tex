@@ -102,7 +102,7 @@ Evaluation of ANN is done layer by layer.
 
 The greatest trait of ANN is ability to learn from given data and then make the best approximate prediction.
 The aim of the learning process is to find the most optimal values for network's weights and biases while minimizing error on predicated values.
-For ANN to learn we have to introduce training data consisted of input vector which will be feeded to the network and desired output value (\texit{label}) for calculating our loss.
+For ANN to learn we have to introduce training data consisted of input vector which will be feeded to the network and desired output value (label) for calculating our loss.
 This approach is called supervised learning\footnote{\label{note1}ANN can be also trained using unsupervised learning.}.
 \newline
 
@@ -157,7 +157,7 @@ Finally, we may calculate all weights adjustments through the whole network as
 \[  W_{jk}^l := W_{jk}^l - \alpha\delta_k^{l}a_j^l \]
 where
 \[ \delta_k^{l} = \pd{E}{a_j^L}f'(z_j^L), \quad l = L \]
-and
+or
 \[ \delta_k^{l} = \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l), \quad l = 2,\ldots, L-1. \]
 
 We won't be exampling the equation for biases adjustments because it follows a similar process shown above with just little changes, resulting to equation
