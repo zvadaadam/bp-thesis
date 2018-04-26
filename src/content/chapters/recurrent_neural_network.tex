@@ -66,19 +66,37 @@ Putting equations together, we have the following relationship.
 
 \subsection{Exploding and Vanishing Gradients}
 
-The problems of \textit{vanishing} and \textit{exploding gradients} occur when backpropagating errors across many time steps
-The derevatives can get big or very small.
+Even though, RNNs had achieved success in learning short-range dependencies, they haven’t been showing any worth mentioning achievement with learning mid-range dependencies.
+That was mainly cause by problems of \textit{vanishing} and \textit{exploding gradients}, introduced in Bengio et al. (1994).
+%http://www.iro.umontreal.ca/~lisa/pointeurs/ieeetrnn94.pdf
+
+The exploding gradient problem occurs when backpropagating the error across many time steps, that could lead to exponetilly grow of gradient for long-term components.
+Basically, a small change in parameters at initial stages can get acumulatd through the time-steps resulting to the exponetilly grow.
+The values of weights can become so large as to overflow and result in \textit{NaN} values.
+
+The vanishing gradient problem refres to oposite behavior when the gradient values are shrinking exponentially fast and eventually vanishing completely.
+Gradient contributions from later time-steps become zero and the states at those steps doesn’t contribute so we end up not learning long-range dependencies.
+Vanishing gradients aren’t exclusive to RNNs, they also happen in deep ANN.
+%http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/
+
+\subsubsection{Solutions}
+
+To overcome problem with exploding gradient we can \textit{gradient cliping} method.
+To fix the problem of vanishing gradient is little more complicated.
+We can avoid it by initilizing the weights carufuly.
 
 \section{LSTM}
 
+Long-Short-Term-Memories (LSTM) is special kind of RNN cell, introduced by Hochreiter & Schmidhuber in 1997 *REFERENCE*.
+%http://dx.doi.org/ 10.1162/neco.1997.9.8.1735
+Conventional RNNs are only just able to learn short-term dependencies because of vanishing gradient problem.
+However, LSTM are not effected by it and are capable of learning long-term dependencies.
+However, LSTM are not effected by it and are capable of learning long-term dependencies.
+
+RNN are not used anymore, just LSTM...
+
+\imagefigure{lstm_cell.png}{Diagram of LSTM cell.}
+%https://medium.com/@andre.holzner/lstm-cells-in-pytorch-fab924a78b1c
+
 
 \section{CTC}
-
-Conceptually, BPTT works by unrolling all input timesteps.
-Each timestep has one input timestep, one copy of the network, and one output.
-Errors are then calculated and accumulated for each timestep.
-The network is rolled back up and the weights are updated.
-
-
-Even though these networks had achieved success in learning short-range dependencies, they haven’t been showing any worth mentioning achievement with learning mid-range dependencies.
-This was mainly caused by the problems of vanishing and exploding gradients.{http://arxiv.org/abs/1506.00019}
