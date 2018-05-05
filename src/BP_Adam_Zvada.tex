@@ -21,6 +21,8 @@
 \usepackage{algorithm} %algorithm visualisation
 \usepackage[noend]{algpseudocode}
 
+\usepackage{csquotes} %'babel/polyglossia' detected but 'csquotes' missing (biblatex)
+
 
 % % list of acronyms
 % \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
@@ -50,6 +52,8 @@
 }
 
 \newcommand*{\pd}[3][]{\ensuremath{\frac{\partial^{#1} #2}{\partial #3}}}
+
+\DeclareMathOperator*{\argmax}{argmax}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % EDIT THIS
@@ -88,15 +92,14 @@
 
 
 \setsecnumdepth{all}
-\chapter{Introduction to Speech Recognition}
-Introduction to Speech Recognition
 
 \input content/chapters/neural_network.tex
 
 \input content/chapters/recurrent_neural_network.tex
 
-\chapter{Implementation}
-Implementation
+\input content/chapters/introduction_speech_recognition.tex
+
+\input content/chapters/implementation.tex
 
 \chapter{Experiments}
 Experiments

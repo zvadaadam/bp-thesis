@@ -47,6 +47,7 @@ We also use the backpropagation algorithm, but since the parameters are shared b
 
 
 \subsection{Backpropagation Through Time}
+
 The most used algortihm to train RNN is \textit{backpropagation through time} (BPTT), introduced by Werbos in 1990.
 %http://axon.cs.byu.edu/~martinez/classes/678%20old/backproptime.pdf
 %Paul J. Werbos. Backpropagation through time: what it does and how to do it. Proceedings of the IEEE, 78(10):1550–1560, 1990.
@@ -85,18 +86,19 @@ To overcome problem with exploding gradient we can \textit{gradient cliping} met
 To fix the problem of vanishing gradient is little more complicated.
 We can avoid it by initilizing the weights carufuly.
 
+
 \section{LSTM}
 
-Long-Short-Term-Memories (LSTM) is special kind of RNN cell, introduced by Hochreiter & Schmidhuber in 1997 *REFERENCE*.
+Long-Short-Term-Memories (LSTM) is special kind of RNN cell, introduced by Hochreiter and Schmidhuber in 1997 *REFERENCE*.
 %http://dx.doi.org/ 10.1162/neco.1997.9.8.1735
 Conventional RNNs are only just able to learn short-term dependencies because of vanishing gradient problem.
 However, LSTM are not effected by it and are capable of learning long-term dependencies.
-However, LSTM are not effected by it and are capable of learning long-term dependencies.
-
-RNN are not used anymore, just LSTM...
+RNN are not used anymore, just LSTM.
 
 \imagefigure{lstm_cell.png}{Diagram of LSTM cell.}
 %https://medium.com/@andre.holzner/lstm-cells-in-pytorch-fab924a78b1c
 
 
 \section{CTC}
+
+Connectionist temporal classication (CTC) is a loss function used for classification of sequential data.

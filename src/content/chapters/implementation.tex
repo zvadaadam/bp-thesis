@@ -1,0 +1,42 @@
+\chapter{Implementation}
+
+The goal is to implement end-to-end speech recognizer using neural network.
+High-level concept, how the implemented speech recognition system works is illustred on *figure*.
+It takes a wav file as an input generated from given microphone and perfroms preprocessing and feature extraction.
+The data are feeded to the recognizer which outputs the prediction of transcribed text from speech.
+
+\imagefigurelarge{prediction_diagram.pdf}{Speech Recognition System}
+
+In order to perfrom sucessful prediction with the recognizer, it needs to be trainned on tratning data.
+
+\imagefigurelarge{learning_diagram.pdf}{Diagram of the learning phase for the speech recognition system}
+
+\section{Tools}
+
+\subsection{Python}
+
+Speech recognition system is implemented in programming languge \textit{Python} which is currently most popular approach in machine learning and AI.
+Python is a very powerful, flexible, open source language that is easy to learn.
+The greastest strenth however is wide range of libraries and frameworks for ML and AI.
+
+\subsection{Tensorflow}
+
+
+TensorFlow is open-source library developed by Google for deep learning and other algorithms involving large number of mathematical operations.
+The primary unit in TensorFlow is a tensor.
+A tensor consists of a set of primitive values shaped into an array of any number of dimensions.
+These massive numbers of large arrays are the reason that GPUs and other processors designed to do floating point mathematics excel at speeding up these algorithms. *Reference*
+% https://dzone.com/refcardz/introduction-to-tensorflow?chapter=1
+
+TensorFlow programs are structured into a construction phase that assembles a comuptaional graph, and an execution phase that uses a session to execute operation in the graph.
+However, TensorFlow programs are hard to debug because of the structure. Fortunately, TensorFlow offers a built-in function for visualization of the computaion called TensorBoard.
+
+\section{Training Data}
+
+Since we implement end-to-end speech recognizer
+
+\section{Computing Power}
+
+\section{Preprocessing and Feature Extraction}
+
+\section{Recognizer}
