@@ -84,7 +84,7 @@ FloydHub is a Platform-as-a-Service for training and deploying deep learning mod
 
 \section{Config Reader}
 
-*TODO*
+To efficiently use different hyperparametrs, datasets or
 
 
 \section{Preprocessing and Feature Extraction}
@@ -176,5 +176,15 @@ feed = {
 batch_cost, _ = session.run([loss_operation, optimizer_operation], feed)
 \end{lstlisting}
 
+TensorFlow also offers a way of restoring trainned networks. During a training we may save checkpoint files with operations variables because \texttt{tf.Variable} maintains state in the graph across the computaions.
+It's achived by an object \texttt{tf.train.Saver()}, upon the object we either call method \texttt{save(session, checkpoint\_path)} or \texttt{restore(session, checkpoint\_path)}.
 
 \section{Robot NAO}
+
+Robot Nao is an autonomous, programmable humanoid robot and the goal is to use the implemented speech recognizer as a voice-user interface.
+
+\imagefiguresmall{nao_robot.png}{Robot Nao}
+
+\texttt{ALProxy} provides remote connection to the NAO robot and gives us access to all the robot's methods.
+Speech recognizer will be python module running remotly and using \texttt{ALProxy} object we are able to fetch the recorded robot's sound data.
+The sound data will be processed by the speech recognizer and robot can react to the predicated text.
