@@ -1,13 +1,18 @@
 \chapter{Implementation}
 
 The goal is to implement end-to-end speech recognizer using neural network.
-High-level concept, how the implemented speech recognition system works is illustred on *figure*.
-It takes a wav file as an input generated from given microphone and perfroms preprocessing and feature extraction.
+High-level concept, how the implemented speech recognition system works is illustrated on *figure*.
+It takes a wav file as an input generated from given microphone and performs preprocessing and feature extraction.
 The data are feeded to the recognizer which outputs the prediction of transcribed text from speech.
 
 \imagefigurelarge{prediction_diagram.pdf}{Speech Recognition System}
 
-In order to perfrom sucessful prediction with the recognizer, it needs to be trainned on tratning data.
+The implemented recognizer is build on recurrent neural networks, therefore they need to be trained, in order to make a successful predictions.
+On *figure 4.2* is shown how the recognizer is being trained.
+It's done by providing speech and transcribed text from the training dataset.
+RNN feed-forwards all the vectors of MFCC and the RNN's output are processed by CTC. Obtaining the prediction text of the speech signal.
+Using backpropagtion through time algorithm we update the weights and biases of RNN which minimize the error of the loss function resulting to better prediction in future.
+
 
 \imagefigurelarge{learning_diagram.pdf}{Diagram of the learning phase for the speech recognition system}
 
@@ -15,12 +20,11 @@ In order to perfrom sucessful prediction with the recognizer, it needs to be tra
 
 \subsection{Python}
 
-Speech recognition system is implemented in programming languge \textit{Python} which is currently most popular approach in machine learning and AI.
+Speech recognition system is implemented in programming language \texttt{Python} which is currently most popular approach in machine learning and AI.
 Python is a very powerful, flexible, open source language that is easy to learn.
-The greastest strenth however is wide range of libraries and frameworks for ML and AI.
+The greatest strength however is wide range of libraries and frameworks for ML and AI.
 
 \subsection{Tensorflow}
-
 
 TensorFlow is open-source library developed by Google for deep learning and other algorithms involving large number of mathematical operations.
 The primary unit in TensorFlow is a tensor.
@@ -28,15 +32,149 @@ A tensor consists of a set of primitive values shaped into an array of any numbe
 These massive numbers of large arrays are the reason that GPUs and other processors designed to do floating point mathematics excel at speeding up these algorithms. *Reference*
 % https://dzone.com/refcardz/introduction-to-tensorflow?chapter=1
 
-TensorFlow programs are structured into a construction phase that assembles a comuptaional graph, and an execution phase that uses a session to execute operation in the graph.
-However, TensorFlow programs are hard to debug because of the structure. Fortunately, TensorFlow offers a built-in function for visualization of the computaion called TensorBoard.
+TensorFlow programs are structured into a construction phase that assembles a computational graph, and an execution phase that uses a session to execute operation in the graph.
+However, TensorFlow programs are hard to debug because of the structure. Fortunately, TensorFlow offers a built-in function for visualization of the computation called TensorBoard.
 
 \section{Training Data}
 
-Since we implement end-to-end speech recognizer
+Training data are essential for nerual networks performance and its quality, variety, and quantity determine the success of the learning models.
+Since we use approach of supervised learning for our recognizer, we have to provide labeled data.
+
+\subsection{Datset Base Class}
+
+In source code of the speech recognition system we have class \texttt{DatsetBase} which stores path to audios and transactions (labels) from our training dataset.
+It has also method \texttt{next\_batch} which takes as a parameter \texttt{batch\_size} and returns next batch of MFFC vectors and its labels.
+In method \texttt{next\_batch} we retrive speech signal data from audio file and perform preprocessing and feature extraction, then also the text labels are loaded from its file path.
+Upon the text labels is called preprocessing method which simplifies the text and eliminites all the non-alphabetic characters.
+
+However, retriving data from file system and performing processing and feature extraction upon them during a training phase is slowing down the process.
+One of the solution could be to prepare the data beforehand and store it as some variable which would lead to lower retriving latency.
+
+\subsection{Numbers}
+
+Before using my learning model on large training dataset, I had been debuging and validating it on smaller dataset.
+I have used \texttt{Free Spoken Digit Dataset} from Github *reference*.
+%https://github.com/Jakobovski/free-spoken-digit-dataset
+The dataset provides three english speakers with 1500 recordings, 50 recordings for each digit per speaker.
+
+In source code we have a class \texttt{DigitDataset} which extands the base class \texttt{DatsetBase}.
+Class \texttt{DigitDataset} provides method called \texttt{read\_digit\_dataset} which takes argument of digit dataset path and stores all training data paths in audios and labels variables.
+They are later used in \texttt{next\_batch} method.
+
+\subsection{VCTK Corpus}
+
+VCTK Corpus is training dataset which includes speech data uttered by 109 native speakers of English with various accents.
+Each speaker reads out about 400 sentences, most of which were selected from The Herald newspaper *regerence*.
+%http://homepages.inf.ed.ac.uk/jyamagis/page3/page58/page58.html
+Even though, this dataset was designed to maximise the contextual and phonetic coverage for HMM-based speech recognizers, we might as well use it for ANN-based speech recognizer.
+The dataset size is around 15GB which is still not enough to create robust production ready speech recognizer but it's enough for the purpose of this thesis.
+
 
 \section{Computing Power}
 
+Training nerual networks could be considred as computationaly difficult problem.
+However, with the right hardware we can speed up the process significantly.
+Backpropagtion algorithm is mostly about multiplying matrices.
+Fortunately, GPUs are explicitly designed to handle multiple matrix calculations at the same time, therefore it is highly recommanded to use GPUs for training nerual networks.
+
+\subsection{Floyd Hub}
+
+FloydHub is a Platform-as-a-Service for training and deploying deep learning models in the cloud.
+
+
+\section{Config Reader}
+
+*TODO*
+
+
 \section{Preprocessing and Feature Extraction}
 
+
+\subsection{Audio}
+
+In source code we have python file \texttt{audio\_utils} with implements a function called \texttt{audiofile\_to\_input\_vector}.
+The function takes as parameter file path to wav file and the number of cepstrum coefictions.
+First it loads the wav file from the file system and downsize the sample rate to 16kHz as a part of preprocessing.
+Even this reduced sample rate contains enough speech information for our recognizer to make successful predication.
+Then feature extraction is called upon the preprocessed wav file which is done by MFCC.
+Library \texttt{python\_speech\_features} provides implementation of MFCC method, we just need to configure the used parameters such as the number of cepstrum coefictions, length of window or the length of overlap.
+
+\subsection{Text}
+
+In python file \texttt{text\_utils} we have function \texttt{get\_refactored\_transcript} which takes string and performs multiple operations for simplification.
+It converts string to lowercases, eliminites all non-alphabetic characters besides the spaces between words.
+Then string is converted to \textit{numpy} array of characters which gets encoded to integers values.
+Thanks to the encoding we can simply calculate the loss function for given text label.
+
+
 \section{Recognizer}
+
+Recognizer was created by using TensorFlow library. Before we begin to assembles a computational graph we
+
+\subsection{Computational Graph}
+
+TensorFlow requires to assemble a computational graph which will represent the computational steps.
+
+\subsubsection{CTC Network}
+
+In source code we have \texttt{CTCNetwork} class representing important features of the network such as input and output dimensions, loss function or used optimizer.
+
+The first method is \texttt{generate\_placeholders}. \textit{Placeholders} are TensorFlow objects able to store tensors. They don't have to be initilized and input tensors are provided during runtime.
+Their main purpose is for input and output values.
+Therefore, the method \texttt{generate\_placeholders} is creating input and output placeholders for the computational graph.
+Input placeholder for the network is created as three dimensional array. First dimension represents batch index, second is for number of timestaps and last is for the length of acoustic vector (MFCC vector).
+For input is also created another placeholder of sequence length for each one on the batched sentences.
+Output of network is represented by a sparse placeholder because it is required by TensorFlow's CTC.
+
+Second method \texttt{loss\_funtion} creates CTC loss function inside a computational graph.
+We use TensorFlow method \texttt{tf.nn.ctc\_loss} which takes input parameters as a label in sparse matrix format, logits*footnote* which is the last layer of the network and sequence length.
+The TensorFlow method also performs softmax operation upon the input before applying CTC loss.
+
+The third method is \texttt{train\_optimizer} is defines the used optimizer in the graph. Optimizer is performing some type of gradient descent algorithm to minimize the error on the loss function.
+There are many optimizer to choose from but currently the recognizer uses one of the most popular and universal optimzer in deep learning which is \textit{AdamOptimizer}.
+
+Another method is \texttt{decoder} which decodes predicated sentence from outputed probabilities using argument of input sequence length placeholder and ouput from last layer.
+It uses TensorFlow method called \texttt{tf.nn.ctc\_greedy\_decoder}. The same output can be decoded also by using \texttt{tf.nn.ctc\_beam\_search\_decoder} but it is little slower than the greedy decoder.
+
+Last method is \texttt{compute\_label\_error\_rate} which takes parameter as a decoded sparse label and computes its label error rate.
+
+\subsubsection{LSTM CTC}
+
+Class \texttt{LSTMCTC} extends from the \texttt{CTCNetwork} class and it defines the inner structure of the network.
+The constructor sets number of layers, hidden neurons, input dimension and the size of acoustic vector.
+
+The class has method \texttt{define} which creates the part of the computation graph.
+It calls parent method for generating placeholders.
+Creates LSTM cells using \texttt{tf.contrib.rnn.LSTMCell} method for all layers then we stack the cells into multilayer RNN networks with method \texttt{tf.contrib.rnn.MultiRNNCell}, the stacked network is used in method \texttt{tf.nn.dynamic\_rnn} which finalizes it with input placeholders.
+The method \texttt{define} returns the output layer of the network.
+%initilize TensorFlow \texttt{tf.Variable} which maintains state in the graph across the computaions. TensorFlow variables has to initilized with constant value and we will be using them for storing weights and baises of the recurrent neural network.
+
+\subsection{Training}
+
+Training phase of the recognizer is implemented in file \texttt{train.py} by method \texttt{train\_network} which takes dataset and config reader object.
+The method first has to read the hyperparametrs of the network from the config reader and then the computational graph is contructed using the \texttt{LSTMCTC} methods.
+
+In TensorFlow the computation on created graphs are perfromed inside a \texttt{tf.Session()}, thus the training phase is happing inside the session where we loop thorough all the training epoches.
+In the epoch we train RNN on all training data which are provided using dataset object's method \texttt{next\_batch}.
+To run the c we will use function \texttt{session.run(fetches, feed\_data)}. The \textit{fetches} will be graph operation which are responsible for the training and \textit{feed\_data} are network's placeholder with assigned values from \texttt{next\_batch} method in dictionary structuer.
+Example code of running the session for backpropagtion algortihm:
+
+\lstset{
+language=Python,
+basicstyle=\small,
+keywordstyle=\bfseries\color{green!40!black},
+identifierstyle=\color{blue},
+frame=L,
+}
+\begin{lstlisting}
+feed = {
+  lstm_ctc.input_placeholder : train_x,
+  lstm_ctc.label_sparse_placeholder : train_y_sparse,
+  lstm_ctc.input_seq_len_placeholder : train_sequence_length
+}
+
+batch_cost, _ = session.run([loss_operation, optimizer_operation], feed)
+\end{lstlisting}
+
+
+\section{Robot NAO}
