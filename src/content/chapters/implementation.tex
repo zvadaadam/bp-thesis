@@ -69,22 +69,11 @@ Each speaker reads out about 400 sentences, most of which were selected from The
 Even though, this dataset was designed to maximise the contextual and phonetic coverage for HMM-based speech recognizers, we might as well use it for ANN-based speech recognizer.
 The dataset size is around 15GB which is still not enough to create robust production ready speech recognizer but it's enough for the purpose of this thesis.
 
-
-\section{Computing Power}
-
-Training nerual networks could be considred as computationaly difficult problem.
-However, with the right hardware we can speed up the process significantly.
-Backpropagtion algorithm is mostly about multiplying matrices.
-Fortunately, GPUs are explicitly designed to handle multiple matrix calculations at the same time, therefore it is highly recommanded to use GPUs for training nerual networks.
-
-\subsection{Floyd Hub}
-
-FloydHub is a Platform-as-a-Service for training and deploying deep learning models in the cloud.
-
-
 \section{Config Reader}
 
-To efficiently use different hyperparametrs, datasets or
+To efficiently use different hyperparametrs, datasets or feature extraction configurations.
+We run the speech recognizer training with \textit{YAML} configuration file.
+
 
 
 \section{Preprocessing and Feature Extraction}

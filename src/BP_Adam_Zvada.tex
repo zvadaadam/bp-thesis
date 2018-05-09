@@ -29,7 +29,6 @@
 % \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
 % \makeglossaries
 
-%\bibliographystyle{iso690}
 \bibliography{library.bib} % citace
 
 % usage: \imagefigure{filename}{description}
@@ -91,9 +90,7 @@
 
 \setsecnumdepth{part}
 
-\chapter{Introduction}
-
-
+\input content/chapters/introduction.tex
 
 \setsecnumdepth{all}
 
@@ -105,24 +102,18 @@
 
 \input content/chapters/implementation.tex
 
-\chapter{Experiments}
-Experiments
+\input content/chapters/experiments.tex
 
 \setsecnumdepth{part}
-\chapter{Conclusion}
 
+\input content/chapters/conclusion.tex
 
 \printbibliography[title={Zdroje}]
 
 \setsecnumdepth{all}
 \appendix
 
-\chapter{Acronyms}
-% \printglossaries
-\begin{description}
-	\item[GUI] Graphical user interface
-	\item[XML] Extensible markup language
-\end{description}
+\input content/chapters/acronyms.tex
 
 
 \chapter{Contents of enclosed CD}

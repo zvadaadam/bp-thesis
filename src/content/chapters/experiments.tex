@@ -1,0 +1,45 @@
+\chapter{Experiments}
+
+In this section we will review the speech recognizer performance.
+We will introduce some optimalization to increase the learning model accuracy and also by tweaking hyperparametrs of the network we can achive better results.
+
+\section{Computing Power}
+
+Training nerual networks could be considred as computationaly difficult problem.
+However, with the right hardware we can speed up the process significantly.
+Backpropagtion algorithm is mostly about multiplying matrices and GPUs are explicitly designed to handle multiple matrix calculations at the same time, therefore it is highly recommanded to use GPUs for training nerual networks.
+
+Unfortunately, TensorFlow is just limited on using NVIDIA GPUs to properly work beause the python library \texttt{tensorflow-gpu} which handles the TensorFlow GPUs computaions is build upon CUDA toolkit.
+Therefore, I will be using CPU for the experiments section as the main computational resource.
+Because it would not be possible to train speech recognizer on the whole \textit{VCTK dataset}, for the experiment part I will use \textit{Free Spoken Digit Dataset}.
+
+The final training of the speech recognizer using \textit{VCTK dataset} is done on \textit{Floyd Hub} which is commercial platform for cloud computing.
+
+\subsection{Floyd Hub}
+
+FloydHub is a Platform-as-a-Service for training and deploying deep learning models in the cloud.
+*TODO*
+
+\section{First training}
+
+The hyperparametrs of the first training the speech recognizer on \textit{Free Spoken Digit Dataset}:
+
+\begin{itemize}
+	\item numer of hidden neruons - 100
+	\item number of hidden layers - 1
+	\item batch size - 8
+	\item number of epoches - 150
+  \item learning rate - 0.001
+	\item dimension of acoustic vector - 13
+\end{itemize}
+
+\imagefigurelarge{LER_1.png}{Learning Error rate for *TODO*}
+
+Validation of the speech recognizer performance is evaluated using label error rate.
+On *Figure 5.1.*
+
+
+
+\section{Dropout}
+
+Optimalization of the learning model can be achived by introducing dropout method.

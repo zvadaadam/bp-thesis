@@ -1,11 +1,11 @@
 \chapter{Neural Network}
 
 
-Neural networks have remarkable ability to derive meaning from complicated data. They can be used to extract patterns and detect trends that are too complex to be noticed by either humans or other computer techniques.
+Neural networks have a remarkable ability to derive meaning from complicated data. They can be used to extract patterns and detect trends that are too complex to be noticed by either humans or other computer techniques\cite{introduction_ann}.
 Even though they have been around since the 1950s, it is only in the last decade when they started to outperform robust system or even humans in specify tasks.
 However, they require a huge amount of training examples and computational power to be trained for preforming a reasonable prediction.
-Fortunately, GPUs has seen enormous increase in performance\footnote{\label{note1}WHY GPU FRO DEEP LEARNING.} and
-90\% of the data in the world today has been created in the last two years alone, at 2.5 quintillion bytes of data a day*Refrence data*.
+Fortunately, GPUs has seen enormous increase in performance\footnote{\label{note1}GPUs are explicitly designed to handle multiple matrix calculations at the same time. Evaluation and training of artifical neural networks are mostly matrix operations.} and
+90\% of the data in the world today has been created in the last two years alone, at 2.5 quintillion bytes of data a day\cite{ibm_data}.
 That's why ANN is big topic in Computer Science and in the technology industry and it currently provides the best solutions to many problems such as speech recognition, image recognition, and natural language processing.
 
 \section{Inspiration in Nature}
@@ -13,11 +13,11 @@ That's why ANN is big topic in Computer Science and in the technology industry a
 Artificial neural network (ANN) is heavily inspired by the way how biological neural networks process information in the human brain.
 Even though our brain is extremely complex and still not fully understand, we just need to know how information is being transferred.
 The basic building block is nerve cell called \textit{neuron}. It receives, processes, and transmits information through electrical and chemical signals.
-It's estimated that an average human has 86 billion neurons *.
+It's estimated that an average human has 86 billion neurons\cite{number_of_neurons}.
 
 \imagefigurelarge{nerve_cell.jpg}{Illustration of nerve cell and communication flow}
 
-\textit{Dendrites} are extensions of a nerve cell that propagate the electrochemical stimulation received from other neurons to the cell body.
+As shown on Figure \ref{pic:nerve_cell.jpg}, \textit{dendrites} are extensions of a nerve cell that propagate the electrochemical stimulation received from other neurons to the cell body.
 You may think of them as inputs to neuron, whereas neuron's output is called \textit{axon}, a long nerve fiber that conducts electrical impulses away from the cell body.
 The end of axon is branched to many axon terminals which can be again connected to other dendrites.
 The connection is managed by \textit{synapses} that can permit the passing of electrical signal to cell body.
@@ -30,9 +30,9 @@ It's simplified version of the biological counterpart and we are able to map par
 It takes \textit{n} inputs represented as a vector $x\in\mathbb{R}^n$ which correspond to dendrites.
 Generaly artificial neuron produces single output $y\in\mathbb{R}$ as biological neuron where we call it axon.
 Each neuron's input $i=1,2,\ldots, n$ has assigned weight (synapse) $w_1, w_2 \ldots w_n$, they refer to the connection strength between neurons.
-Weights and same as for synapse are the backbone of learning because in training phases, they keep changing to produce wanted output.(*In this chapter, we will elaborate further.)
+Weights and same as for synapse are the backbone of learning because in training phases, they keep changing to produce wanted output.
 Inside the artificial neuron, input vector with their weights are combined and run through an activation function producing some output $y$.
-This process is illustrated in $LINK_PRECEPRTON$.
+This process is illustrated in Figure \ref{pic:preceptron.png}.
 
 \imagefigurelarge{preceptron.png}{Illustration of nerve cell and communication flow}
 
@@ -41,7 +41,9 @@ This process is illustrated in $LINK_PRECEPRTON$.
 Perceptron is the simplest ANN with just one neuron and since we covered the basic intuition about artificial neuron we may proceed further and take a look at how output is actually calculated.
 The equation for a perceptron can be written as
 
-\[ y = f(\sum_{i=1}^N w_i \cdot x_i + b) \]
+\begin{equation} \label{eq:1}
+ y = f(\sum_{i=1}^N w_i \cdot x_i + b)
+\end{equation}
 
 where
 
@@ -59,7 +61,7 @@ Problems such as speech recognition are not definitely linearly separable, howev
 \subsection{Activation Functions}
 
 We have stated that biological neuron fires electrical signal to other connected neurons whenever it reaches a certain threshold of incoming electrical impulses.
-Activation function is based on that concept and inside an artificial neuron it is used for calculating output signal via equation*.
+Activation function is based on that concept and inside an artificial neuron it is used for calculating output signal via equation \ref{eq:1}.
 It introduces non-linear properties to our ANN and without an activation function would be just a regular linear regression model.
 Nowadays many different activation function are being used and their performance varies from model to model. \newline
 \newline
@@ -86,7 +88,7 @@ The bias value allows the activation function to be shifted to the left or right
 \imagefigure{ann.png}{Basic topology of fully connected artificial neuron network with input vector of size 3, output vector of size 2 and two hidden layers.}
 
 Basic ANN as feedforward model is a directed graph with nodes as neurons and edges with weights representing connection to other neurons.
-ANN can be divided to three important layers as shown in Fig*.
+ANN can be divided to three important layers as shown in Figure \ref{pic:ann.png}.
 Yellow nodes is an input layer which takes input data, dimension of input vector has to correspond to number of input nodes.
 Hidden layer as the green nodes is most important to ANN and that is where the training and evaluation happens.
 Number of hidden layers and neurons needs to be in a good ratio between its size and its effectiveness.
@@ -129,7 +131,7 @@ Weights and biases are updated using formula,
 \[  W_{jk}^l := W_{jk}^l - \alpha\pd{E}{W_{jk}^l} \]
 \[ b_j^l := b_j^l - \alpha\pd{E}{b_j^l} \]
 where $\boldsymbol{W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $\boldsymbol{b_j^l}$ is bias associated with unit
-$i$ in layer $l+1$, $\boldsymbol{\alpha}$ is a learning rate *Reference*, and $\boldsymbol{\pd{E}{W_{jk}^l}}$ or $\boldsymbol{\pd{E}{b_j^l}}$ can be interpreted as minimizing loss function with respect to given weight and bias respectively.
+$i$ in layer $l+1$, $\boldsymbol{\alpha}$ is a learning rate \cite{learning_rate}, and $\boldsymbol{\pd{E}{W_{jk}^l}}$ or $\boldsymbol{\pd{E}{b_j^l}}$ can be interpreted as minimizing loss function with respect to given weight and bias respectively.
 \par
 By applying a chain rule twice on the partial derivative of the loss function with respect to a weight, we get
 \[  \pd{E}{W_{jk}^l} = \pd{E}{a_j^l}\pd{a_j^l}{z_j^l}\pd{z_j^l}{W_{jk}^l} \]
