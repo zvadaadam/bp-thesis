@@ -4,7 +4,7 @@
 Neural networks have a remarkable ability to derive meaning from complicated data. They can be used to extract patterns and detect trends that are too complex to be noticed by either humans or other computer techniques\cite{introduction_ann}.
 Even though they have been around since the 1950s, it is only in the last decade when they started to outperform robust system or even humans in specify tasks.
 However, they require a huge amount of training examples and computational power to be trained for preforming a reasonable prediction.
-Fortunately, GPUs has seen enormous increase in performance\footnote{\label{note1}GPUs are explicitly designed to handle multiple matrix calculations at the same time. Evaluation and training of artifical neural networks are mostly matrix operations.} and
+Fortunately, GPUs has seen enormous increase in performance\footnote{\label{note1}GPUs are explicitly designed to handle multiple matrix calculations at the same time. Evaluation and training of artificial neural networks are mostly matrix operations.} and
 90\% of the data in the world today has been created in the last two years alone, at 2.5 quintillion bytes of data a day\cite{ibm_data}.
 That's why ANN is big topic in Computer Science and in the technology industry and it currently provides the best solutions to many problems such as speech recognition, image recognition, and natural language processing.
 
@@ -12,7 +12,7 @@ That's why ANN is big topic in Computer Science and in the technology industry a
 
 Artificial neural network (ANN) is heavily inspired by the way how biological neural networks process information in the human brain.
 Even though our brain is extremely complex and still not fully understand, we just need to know how information is being transferred.
-The basic building block is nerve cell called \textit{neuron}. It receives, processes, and transmits information through electrical and chemical signals.
+The basic building block is nerve cell called \textit{neuron}. It receives, processes, and transmits information through electrical and chemical signals\cite{neuron}.
 It's estimated that an average human has 86 billion neurons\cite{number_of_neurons}.
 
 \imagefigurelarge{nerve_cell.jpg}{Illustration of nerve cell and communication flow}
@@ -25,7 +25,7 @@ Once the cell reaches a certain threshold, an action potential will fire, sendin
 
 \section{Artificial Neuron}
 
-Artificial neuron is a generic comuptational unit, basic building block for artificial neural network (ANN).
+Artificial neuron is a generic computational unit, basic building block for artificial neural network (ANN).
 It's simplified version of the biological counterpart and we are able to map parts of biological neuron with the artificial one.
 It takes \textit{n} inputs represented as a vector $x\in\mathbb{R}^n$ which correspond to dendrites.
 Generaly artificial neuron produces single output $y\in\mathbb{R}$ as biological neuron where we call it axon.
@@ -75,8 +75,6 @@ List of some activation function:
     where $i$ is number of output
 \end{itemize}
 
-* TODO: Activation Functions features... differentiable and non-linear*
-
 \subsection{Bias}
 
 We can think of bias as a value stored inside neuron and being used to calculate it's output.
@@ -95,10 +93,11 @@ Number of hidden layers and neurons needs to be in a good ratio between its size
 Output layer produces output vector as the prediction for given input.
 
 
-\section{Network Evaluation}
+\subsection{Network Evaluation}
 
-Evaluation of ANN is done layer by layer.
-
+ANN are sometimes called feedforward neural network.
+The reason behind is that the input is feeded into the neuron and then forward to another layer, thus ANN are evaluated layer by layer.
+All neurons calculates the output using similar formula as Perceptron \ref{eq:1}.
 
 \section{Training}
 
@@ -128,46 +127,72 @@ Backpropagation requires optimizer to minimize the error on the training data.
 We will describe backpropagation with using \textit{gradient descent} as the most common optimization algorithm.
 \newline
 Weights and biases are updated using formula,
-\[  W_{jk}^l := W_{jk}^l - \alpha\pd{E}{W_{jk}^l} \]
-\[ b_j^l := b_j^l - \alpha\pd{E}{b_j^l} \]
+\begin{equation} \label{eq:2}
+	W_{jk}^l := W_{jk}^l - \alpha\pd{E}{W_{jk}^l}
+	b_j^l := b_j^l - \alpha\pd{E}{b_j^l}
+\end{equation}
 where $\boldsymbol{W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $\boldsymbol{b_j^l}$ is bias associated with unit
 $i$ in layer $l+1$, $\boldsymbol{\alpha}$ is a learning rate \cite{learning_rate}, and $\boldsymbol{\pd{E}{W_{jk}^l}}$ or $\boldsymbol{\pd{E}{b_j^l}}$ can be interpreted as minimizing loss function with respect to given weight and bias respectively.
 \par
 By applying a chain rule twice on the partial derivative of the loss function with respect to a weight, we get
-\[  \pd{E}{W_{jk}^l} = \pd{E}{a_j^l}\pd{a_j^l}{z_j^l}\pd{z_j^l}{W_{jk}^l} \]
+\begin{equation} \label{eq:3}
+  \pd{E}{W_{jk}^l} = \pd{E}{a_j^l}\pd{a_j^l}{z_j^l}\pd{z_j^l}{W_{jk}^l}
+\end{equation}
 where $\boldsymbol{z_j^l}$ is a sum of weighted inputs to unit $j$ in layer $l$
-\[  z_j^l =  b_j^l + \sum_{k=1}^K {w_{jk}^l}{a_k^{l-1}}  \]
+\begin{equation} \label{eq:4}
+	z_j^l =  b_j^l + \sum_{k=1}^K {w_{jk}^l}{a_k^{l-1}}
+\end{equation}
 and $\boldsymbol{a_j^l}$ is an output of node $j$ in layer $l$
-\[  a_j^l =  f(z_j^l).  \]
-Let's calculate the last two products of equation *Reference*:
-\[  \pd{a_j^l}{z_j^l} = f'(z_j^l)  \]
-\[  \pd{z_j^l}{W_{jk}^l} = \pd{W_{jk}^{l}a_k^{l}}{W_jk^l} = a_k^{l-1}  \]
+\begin{equation} \label{eq:5}
+	a_j^l =  f(z_j^l).
+\end{equation}
+Let's calculate the last two products of equation \ref{eq:3}:
+\begin{equation} \label{eq:6}
+	\pd{a_j^l}{z_j^l} = f'(z_j^l)
+	\pd{z_j^l}{W_{jk}^l} = \pd{W_{jk}^{l}a_k^{l}}{W_jk^l} = a_k^{l-1}
+\end{equation}
 We introduce a new varibale $\boldsymbol{\delta_j^l}$ which represents the error in unit $j$ in layer $l$ and helps us to better understand and calculate real interested value of \pd{E}{W_{jk}^l} and \pd{E}{b_j^l}.
-\[  \delta_j^l = \pd{E}{z_j^l} \]
+\begin{equation} \label{eq:7}
+	\delta_j^l = \pd{E}{z_j^l}
+\end{equation}
 We will simplify the error equation on neuron $j$ in output layer $L$ as
-\[  \delta_j^L = \pd{E}{z_j^L} = \pd{E}{a_j^L}\pd{a_j^L}{z_j^L} = \pd{E}{a_j^L}f'(z_j^L)\]
-Now we have enough information to reformulate equation *reference* for output layer to
-\[ \pd{E}{W_{jk}^l} = \delta_k^{L}a_j^L. \]
+\begin{equation} \label{eq:8}
+  \delta_j^L = \pd{E}{z_j^L} = \pd{E}{a_j^L}\pd{a_j^L}{z_j^L} = \pd{E}{a_j^L}f'(z_j^L)
+\end{equation}
+Now we have enough information to reformulate equation \ref{eq:3} for output layer to
+\begin{equation} \label{eq:9}
+	\pd{E}{W_{jk}^l} = \delta_k^{L}a_j^L.
+\end{equation}
 However, to be able to update weights inside the hidden layers, we have to redefine the calculation of $\delta_j^l$.
 We know that the error produced by an output neuron is just influencing the output value but inside a hidden layer the produced error propagates to all following layers.
 Therefore we have calculate the $\delta_j^l$ where layer $l$ is inside a hidden layer and take into account all $\delta^{l+1}$ from following layer $l+1$.
-\[  \delta_j^l =  \pd{E}{z_j^l} = \sum_i\pd{E}{z_i^{l+1}}\pd{z_i^{l+1}}{z_j^{l}} = \sum_i\pd{E}{z_i^{l+1}}\pd{z_i^{l+1}}{a_j^{l}}\pd{a_j^l}{z_j^l} \]
-\[  = \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l) \]
-where the sum index $i$ iterates over all neurons in layer $l+1$ and Notice that we have substituted $\pd{E}{z_i^{l+1}}$ with $\delta_i^{l+1}$ which is calculated from previous iteration.
+\begin{equation} \label{eq:10}
+	\delta_j^l =  \pd{E}{z_j^l} = \sum_i\pd{E}{z_i^{l+1}}\pd{z_i^{l+1}}{z_j^{l}} = \sum_i\pd{E}{z_i^{l+1}}\pd{z_i^{l+1}}{a_j^{l}}\pd{a_j^l}{z_j^l}
+	= \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l)
+\end{equation}
+where the sum index $i$ iterates over all neurons in layer $l+1$ and Notice that we have substituted $\pd{E}{z_i^{l+1}}$ with $\delta_i^{l+1}$ which is calculated from previous iteration\ref{gradient_equation}.
 \newline
 Finally, we may calculate all weights adjustments through the whole network as
-\[  W_{jk}^l := W_{jk}^l - \alpha\delta_k^{l}a_j^l \]
+\begin{equation} \label{eq:11}
+	W_{jk}^l := W_{jk}^l - \alpha\delta_k^{l}a_j^l
+\end{equation}
 where
-\[ \delta_k^{l} = \pd{E}{a_j^L}f'(z_j^L), \quad l = L \]
+\begin{equation} \label{eq:12}
+	\delta_k^{l} = \pd{E}{a_j^L}f'(z_j^L), \quad l = L
+\end{equation}
 or
-\[ \delta_k^{l} = \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l), \quad l = 2,\ldots, L-1. \]
+\begin{equation} \label{eq:13}
+	\delta_k^{l} = \sum_i\delta_i^{l+1}W_{ij}^{l+1}f'(z_j^l), \quad l = 2,\ldots, L-1.
+\end{equation}
 
 We won't be exampling the equation for biases adjustments because it follows a similar process shown above with just little changes, resulting to equation
-\[  b_{j}^l := b_{j}^l - \alpha\delta_l^{j} \]
-
-\clearpage
+\begin{equation} \label{eq:14}
+	b_{j}^l := b_{j}^l - \alpha\delta_l^{j}
+\end{equation}
 
 \subsubsection{Backpropagation Algortihm}
+
+Backpropagation algortihm in pseudocode:
 
 \begin{algorithm}
 \caption{Backpropagation}\label{euclid}

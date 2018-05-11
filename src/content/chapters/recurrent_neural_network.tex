@@ -2,16 +2,16 @@
 
 Neural networks are powerful learning models that achieve state-of-the-art results in a wide range of machine learning tasks.
 Nevertheless, they have limitations in the field of sequential data.
-Standard ANNs rely on the assumption of independence among the training examples but if data points are related in time or space then ANNs would not be the right model for the task*Reference - arvix*.
+Standard ANNs rely on the assumption of independence among the training examples but if data points are related in time or space then ANNs would not be the right model for the task\cite{critical_rnn}.
 %https://arxiv.org/pdf/1506.00019.pdf
 \newline
 Recurrent neural network (RNN) is type of neural network which is precisely designed to work with sequential data through time.
 The key difference is that RNN's neurons in hidden layer have a special edge (recurrent edge) to a next time step which can be interpreted as a loop.
 In RNN, the neuron's output is dependent on the previous computations which is sent through the recurrent edge.
-Basically, the recurrent edges or loops allow persistence of information from one time step to the next one as shown on *Figure 3.1*.
+Basically, the recurrent edges or loops allow persistence of information from one time step to the next one as shown on Figure \ref{pic:rnn_unrolled.png} \cite{rnn_generation}.
 %https://blog.paperspace.com/recurrent-neural-networks-part-1-2/
 
-\imagefigure{rnn_unrolled.png}{Simple RNN topology and illustration of unrolled RNN through time}
+\imagefigure{rnn_unrolled.png}{Simple RNN topology and illustration of unrolled RNN through time\cite{rnn_topology}}
 %footnote{\label{rnn_unroll}Courtesy of http://www.mdpi.com/1996-1073/10/8/1168/htm}
 
 \section{Evaluation}
@@ -36,69 +36,134 @@ Softmax is being used for calculting output value of $y_t$ resulting to formula
 \section{Training}
 
 Training a RNN is similar to training a traditional ANN.
-We also use the backpropagation algorithm, but since the parameters are shared by all time-steps in the network, the gradient at each output depends not only on the calculations of the current time-step, but also the previous time-steps.
+We also use the backpropagation algorithm, but since the parameters are shared by all time-steps in the network, the gradient at each output depends not only on the calculations of the current time-step, but also the previous time-steps\cite{rnn_train}.
 %http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/
 
-
-\imagefigurelarge{rnn_error.png}{Deriving the gradients according to the back-propagation through time (BPTT) method. Notaion for output value $\epsilon(t)$ corresponds to our $y_t$.}
+\imagefigurelarge{rnn_error.png}{Deriving the gradients according to the back-propagation through time (BPTT) method. Notaion for output value $\epsilon(t)$ corresponds to our $y_t$\cite{rnn_gradients_flow}.}
 %http://www.mdpi.com/2076-3417/8/4/630/htm
-
-
-
 
 \subsection{Backpropagation Through Time}
 
-The most used algortihm to train RNN is \textit{backpropagation through time} (BPTT), introduced by Werbos in 1990.
+The most used algortihm to train RNN is \textit{backpropagation through time} (BPTT), introduced by Werbos in 1990 \cite{werbos_bptt}.
 %http://axon.cs.byu.edu/~martinez/classes/678%20old/backproptime.pdf
-%Paul J. Werbos. Backpropagation through time: what it does and how to do it. Proceedings of the IEEE, 78(10):1550–1560, 1990.
-BPTT is basically an extanded version of backpropagation algortihm where we not only propagate the error to all following layers but also through the hidden states.
-We may think of it as unrolling the RNN to sequence of identical ANNs where the recurrent edge connects the sequences of neurons in hidden layer together as shown on *Figure 3.1 and 3.2*.
-On *Figure 3.2* is also indicated how the errors are propagated.
+BPTT is basically an extended version of backpropagation algorithm where we not only propagate the error to all following layers but also through the hidden states.
+We may think of it as unrolling the RNN to sequence of identical ANNs where the recurrent edge connects the sequences of neurons in hidden layer together as shown on Figure \ref{pic:rnn_unrolled.png} and \ref{pic:rnn_error.png}.
+On Figure 3.2 \ref{pic:rnn_error.png} is also indicated how the errors are propagated.
 The propagation of errors through hidden states allows the RNN to learn long term time dependencies.
-The calculated gradients of the loss function for defined parameter ($W$, $b$) through the sequence of unrolled RNN are then sum up, producing the final gradient for updating the weights or baises, *Equation bottom*.
+The calculated gradients of the loss function for defined parameter ($W$, $b$) through the sequence of unrolled RNN are then sum up, producing the final gradient for updating the weights or biases, *Equation bottom*.
 \[ \pd{E}{W_ij^l} = \sum_{t=1}^{T}\pd{E_t}{W_ij^l} \]
-where $E$ is predefined loss function, ${W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $T$ is number of input sequences and $\pd{E_t}{W_{ij}^l}$ is calculated similarly as in backpropagation with just considering existance of recurrent edges
+where $E$ is predefined loss function, ${W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $T$ is number of input sequences and $\pd{E_t}{W_{ij}^l}$ is calculated similarly as in backpropagation with just considering existence of recurrent edges
 \[ \pd{E_t}{W_{ij}^l} = \sum_{k=1}^{t}\pd{E_t}{y_t}\pd{y_t}{h_t}\pd{h_t}{h_k}\pd{h_k}{W_{ij}^l} \]
 To compute the $\pd{h_t}{h_k}$ we use simple chain rule over all hidden states in interval [$k$,$t$].
 \[ \pd{h_t}{h_k} = \prod_{i=k+1}^{t}\pd{h_i}{h_{i-1}} \]
-Putting equations together, we have the following relationship.
+Putting equations together, we have the following relationship\cite{rnn_dif}.
 %http://proceedings.mlr.press/v28/pascanu13.pdf
 \[  \pd{E}{W_{ij}^l} = \sum_{t=1}^{T}\sum_{j=1}^{t}\pd{E_t}{y_t}\pd{y_t}{h_t}(\prod_{i=k+1}^{t}\pd{h_i}{h_{i-1}})\pd{h_k}{W_{ij}^l} \]
 
 \subsection{Exploding and Vanishing Gradients}
 
 Even though, RNNs had achieved success in learning short-range dependencies, they haven’t been showing any worth mentioning achievement with learning mid-range dependencies.
-That was mainly cause by problems of \textit{vanishing} and \textit{exploding gradients}, introduced in Bengio et al. (1994).
+That was mainly cause by problems of \textit{vanishing} and \textit{exploding gradients}, introduced in Bengio in 1994 \cite{vanishing_gradient}.
 %http://www.iro.umontreal.ca/~lisa/pointeurs/ieeetrnn94.pdf
 
-The exploding gradient problem occurs when backpropagating the error across many time steps, that could lead to exponetilly grow of gradient for long-term components.
-Basically, a small change in parameters at initial stages can get acumulatd through the time-steps resulting to the exponetilly grow.
+The exploding gradient problem occurs when backpropagating the error across many time steps, that could lead to exponentially grow of gradient for long-term components.
+Basically, a small change in parameters at initial stages can get accumulated through the time-steps resulting to the exponentially
+ grow.
 The values of weights can become so large as to overflow and result in \textit{NaN} values.
 
-The vanishing gradient problem refres to oposite behavior when the gradient values are shrinking exponentially fast and eventually vanishing completely.
+The vanishing gradient problem refers to opposite behavior when the gradient values are shrinking exponentially fast and eventually vanishing completely.
 Gradient contributions from later time-steps become zero and the states at those steps doesn’t contribute so we end up not learning long-range dependencies.
-Vanishing gradients aren’t exclusive to RNNs, they also happen in deep ANN.
+Vanishing gradients aren’t exclusive to RNNs, they also happen in deep ANN\cite{existence_gradient}.
 %http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/
 
 \subsubsection{Solutions}
 
-To overcome problem with exploding gradient we can \textit{gradient cliping} method.
+To overcome problem with exploding gradient we can apply \textit{gradient clipping} method.
+The values of the error gradient are checked against a predefined threshold value and clipped or set to that threshold value if the error gradient exceeds the threshold\cite{gradient_cliping}.
+\imagefigure{gradient_clipping.png}{Situation of using gradient clipping (dashed line) against the exploding gradient\cite{rnn_dif}}
+Another possibility is to use \textit{ReLU} activation function which tends to reduce the the exploding gradient problem.
 To fix the problem of vanishing gradient is little more complicated.
-We can avoid it by initilizing the weights carufuly.
-
+We can always try perform more careful initialization process but it does not always help.
+It requires different architecture approach achieved by updating the RNN neuron to more complex LSTM cells.
 
 \section{LSTM}
 
-Long-Short-Term-Memories (LSTM) is special kind of RNN cell, introduced by Hochreiter and Schmidhuber in 1997 *REFERENCE*.
+Long-Short-Term-Memories (LSTM) is special kind of RNN cell, introduced by Hochreiter and Schmidhuber in 1997 \cite{lstm}.
 %http://dx.doi.org/ 10.1162/neco.1997.9.8.1735
 Conventional RNNs are only just able to learn short-term dependencies because of vanishing gradient problem.
-However, LSTM are not effected by it and are capable of learning long-term dependencies.
-RNN are not used anymore, just LSTM.
+However, LSTM does not get effected and it's capable of learning long-term dependencies.
 
-\imagefigure{lstm_cell.png}{Diagram of LSTM cell.}
+\imagefigure{lstm_cell.png}{Diagram of LSTM cell\cite{lstm_diagram}.}
 %https://medium.com/@andre.holzner/lstm-cells-in-pytorch-fab924a78b1c
 
+As shown on Figure \ref{pic:lstm_cell.png} we notice that LSTM is just more complex activation units.
+Similarly as basic RNN cell which propagates hidden state of $h_t$ to another time-step and also as cell output, the LSTM cell has extra state denoted as $c_t$ and called \textit{cell state} and it's just being propagated to another time-step.
+The cell state is more of a cell's memory.
 
-\section{CTC}
+LSTM architeture follows stages during the evaluation where first we have to decide what information we want to get rid of from cell state, that is achived aplyting formula using sigmoid function
+\begin{equation} \label{eq:1}
+  f_t = {\sigma}({W_f}{h_{t-1}} + {W_f}{x_t} + b_f)
+\end{equation}
+and we call $f_t$ as forget gate.
+Another step is to calculate so-called \textit{input gate} denoted as $i_t$, it determines whether or not the input is worth preserving.
+\begin{equation} \label{eq:2}
+  i_t = {\sigma}({W_i}{h_{t-1}} + {W_i}{x_t} + b_i)
+\end{equation}
+The third value is \textit{memory gate} as ${g_t}$, it is using the input with the previous hidden state to observe the input in the context of the past.
+\begin{equation} \label{eq:3}
+  {g_t} = {\tanh}({W_g}{h_{t-1}} + {W_g}{x_t} + b_c)
+\end{equation}
+Using equation \ref{eq:1}, \ref{eq:2} and \ref{eq:3} we may calculate the new cell state using formula
+\begin{equation} \label{eq:4}
+  {c_t} = {f_t}{c_{t-1}} + {i_t}{g_t}
+\end{equation}
+Basically, $c_t$ is constructed by applying the forget gate on the previous cell state and the memory gate gets augmented by the input gate.
+The last value to produce is hidden state which will be a sort of filtered cell state
+\begin{equation} \label{eq:5}
+  {h_t} = {\tanh}(c_t)o_t
+\end{equation}
+where $o_t$ is called \textit{output gate} and it augments input information using formula
+\begin{equation} \label{eq:6}
+  {o_t} = {\sigma}({W_o}{h_{t-1}} + {W_o}{x_t} + b_o)
+\end{equation}
+The whole process of the LSTM cell evaluation is also illustrated on Figure \ref{pic:lstm_cell.png}.
 
-Connectionist temporal classication (CTC) is a loss function used for classification of sequential data.
+
+\section{Connectionist temporal classication}
+
+Connectionist temporal classication (CTC) is a loss function used for classification of sequential data, initially presented by Alex Graves in 2006 \cite{ctc}.
+%http://www.cs.toronto.edu/~graves/icml_2006.pdf
+The idea of CTC is that the label is not generated directly by the RNN, but instead we calculate a probability distribution over all possible characters at every time-step.
+
+For a sequence labelling task where the labels are from an alphabet $L$, we introduce extra unit as \textit{blank} character, $\hat{L}=L\cup\{blank\}$.
+CTC consists of a softmax output layer which estimates the probabilities of observing the corresponding labels at particular times\cite{ctc_info}.
+
+Let's denote that ${y^t}_{k}$ of output unit $k$ at time-stap $t$ is interpreted as the probability of observing label $k$ at time $t$ and input sequence $x$ of length $T$.
+Now we can calculate a probability of path sentence $\pi\in\hat{L}$ using formula
+\begin{equation} \label{eq:7}
+  p(\pi|x) = \prod_{t=1}^{T}y^{t}_{\pi_t}.
+\end{equation}
+Now let's define many-to-one mapping $\beta$ which simplifies the sentence path by striping the multiple trailing character to just one and then removing the \textit{blank} characters altogether.
+\[ \beta(--hh--e--ll-lll-oo-) = \beta(-h-e-l-l-o-) = hello \]
+We may calculate the marginal probability of the sequence $l$ using the defined $\beta$ mapping from given path:
+\begin{equation} \label{eq:8}
+  p(l|x) = \sum_{\pi=\beta^{-1(l)}}(\pi|x)
+\end{equation}
+This so-called \textit{collapsing together} of different paths onto the same labelling is what allows CTC to use unsegmented data, because it removes the requirement of knowing where in the input sequence the labels occur.
+However, it also makes CTC unusable for tasks where the location of the labels must be determined\cite{ctc_info}.
+
+To decode the output for input sequence, we have to maximize the probability of sequence in respect to input data.
+\begin{equation} \label{eq:9}
+  h(x) = \argmax_l p(l|x)
+\end{equation}
+For efficent calculation of $p(l|x)$ we use \textit{backward-forward} algorithm with detail explenantion on \cite{ctc}.
+
+To use CTC for RNN training, we have to define the loss function for the BPTT algorithm.
+CTC loss function is derived from the principle of maximum likelihood with formula
+\begin{equation} \label{eq:10}
+  E = -ln(\prod_{x,z}p(z|x)) = - \sum_{x,z} ln(p(z|x))
+\end{equation}
+where $(x,z)$ are from the training dataset\cite{ctc_info}.
+
+%There are many aproches, we can make assumation that the most probable path corresponds to the most probable labelling which is easy to compute.
+%However, it can sometimes lead to errors a that is why \textit{prefix search decoding} methods are also used.
