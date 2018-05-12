@@ -117,9 +117,26 @@ End-to-end speech recognizers simplifies the training and deployment process alt
 
 \subsection{Connectionist Temporal Classification}
 
-Connectionist Temporal Classification (CTC) were introduced in *section*
-First step torwards end-to-end speech recognizers were due to the introduction of recurrent neural network (RNN) *section* since they are designed to deal with sequenctional data through time.
+Connectionist Temporal Classification (CTC) were introduced in *section* a it is the best fit for end-to-end speech recognizer.
+Diagram on Figure \ref{pic:ctc_speech.png} shows overview of the model architeture.
+Speech can be interprted as time sequence, thus RNN with LSTM cells will be used since they are they are designed to deal with sequenctional data through time.
+The CTC make it possible to train RNNs for sequence labelling problems where the input-output alignment is unknown.
 
-\subsection{CTC}
+\imagefigure{ctc_speech.png}{End-to-end speech recognizer diagram using CTC*Ref*}
+%https://www.silversparro.com/single-post/2018/01/26/Making-CTCs-Deep-Learning-Function-work-for-Speech-Recognition
 
-Connectionist Temporal Classification make it possible to train RNNs for sequence labelling problems where the input-output align- ment is unknown.
+For example, this type of speech recognition model is used in Google Voice Search on Android and iOS*ref*.
+%https://ai.googleblog.com/2015/09/google-voice-search-faster-and-more.html
+
+
+\subsection{Listen, Attend and Spell}
+
+Listen, Attend and Spell (LAS) is current state-of-the-art end-to-end speech recognizer *REF*.
+%http://storage.googleapis.com/pub-tools-public-publication-data/pdf/74a8df45b9583e193e6cf8e156dfba9b73c33a0c.pdf
+
+It consists of an encoder recurrent neural network (RNN), which is named the listener, and a decoder RNN, which is named the speller.
+The listener is a pyramidal RNN that converts low level speech signals into higher level features.
+The speller is an RNN that converts these higher level features into output utterances by specifying a probability distribution over sequences of characters using the attention mechanism.
+The listener and the speller are trained jointly.
+
+*TODO*

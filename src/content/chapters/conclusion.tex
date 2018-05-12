@@ -1,16 +1,15 @@
 \chapter{Conclusion}
 
-The goal of the thesis was to implement speech recognizer using nerual networks which will be later used as voice-user interface on Robot NAO.
+The goal of the thesis was to get familiar with the speech recognition field and implement speech recognizer using neural networks which would be used as voice-user interface on Robot NAO.
 
-First we have introduced the concept of artifical neural networks and basics of the internal network architecture.
-We have explained the training phase of artifical neural networks and how backpropagtion algortihm is used to modify the weights and baises.
-We have extanded the knowleadge of nerual networks by introducing recurrent nerual networks and explained the improved version of backpropagtion algortihm, compatible with RNN.
-However, RNNs presented a problem with vanishing and exploding gradient and we explained a possible solution in type of LSTM cells as an improvment upon basic RNN's neuron.
+We have covered the topics of artificial neural networks and recurrent neural network, and we explained how backpropagtion algorithm works during a training phase.
+Afterwards we explored speech recognition architectures and explained how speech signals is modified for the purposes of speech recognition.
 
-The speech recognition systems has drasticly changed over the last decade.
-We have given an overview of HMM-based speech recognition system and talked about how the field is starting to shift to end-to-end speech recognizer systems.
+The implemented solution of end-to-end speech recognizer is build upon recurrent neural networks with LSTM neurons, CTC loss function and speech signal features are extracted using MFCC.
+The recognizer was firstly trained on Free Spoken Digit Dataset where we achieved error rate of 5\%.
+We have tried to tweak the hyperparametrs for better performance and use dropout as optimization technique.
+We have successfully lowered the error rate on 3\%.
+The main end-to-end speech recognizer which will be used in Robot NAO, we have used VCTK Corpus as training dataset and achieved error rate of x\%.
 
-We have introduced the speech recognition system based on reccurent nerual networks with LSTM cells and CTC loss function on the output layer and propoused the implementation of such a system using TensorFlow library.
-Validation of such a model was first performed on audio number dataset where
-
-In future work we want to finish the integration of implemented speech recognition with Robot NAO and most imporantly traine it on more advance speech corpus with deeper network.
+In future work we want to finish the integration of implemented speech recognition with Robot NAO and train the RNN on more complex speech corpus with deeper network.
+We would like to improve the recognizer by using bidirectional recurrent neural networks.
