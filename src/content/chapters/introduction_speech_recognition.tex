@@ -3,11 +3,11 @@
 Speech recognition is the task of converting speech audio to text reprezentation.
 It has been attracting researchers for many years with a goal to produce efficient speech recognizer, beacuse it's a very easy and natural human-machine interface tool.
 
-Speech recognition system (ASR) takes audio signal as an input and predicts its transcript.
-ASR are normally divided into two important stages as shown on *Figure 1.1*.
-The Feature Extractor block generates a sequence of feature vectors which are then feeded to the recognizer block genereting the correct output word.
+Speech recognition system takes audio signal as an input and predicts the text transcript.
+Arbitrary speech recognizers are normally divided into two important building blocks as shown on \ref{pic:speech_recognizer.png}.
+The Feature Extractor block generates a sequence of feature vectors which are then feeded to the recognizer block genereting the correct output words.
 
-\imagefigurelarge{speech_recognizer.png}{Basic building blocks of a Speech Recognizer}
+\imagefigurelarge{speech_recognizer.png}{Basic building blocks of a Speech Recognizer \cite{recognizer_blocks}}
 %http://www.informatik.uni-ulm.de/ni/staff/FSchwenker/lit/papers/zegers98speech.pdf
 
 \section{Feature Extraction}
@@ -23,29 +23,33 @@ It is needed because the raw speech signal contains other information besides th
 It is adventegous to apply preprocessing to raw speech signal before moving to feature extraction block.
 Using some type of preprocessing leads to easier feature extraction and faster training phase.
 
-Usually, speech is recorded with a sampling frequency of 44.1kHz (44,100 readings per second). According to The Shannon Theorem *Reference*,
-%A. J. Jerri, “The shannon sampling theorem—its various extensions and applications: A tutorial review,” Proceedings of the IEEE, vol. 65, no. 11, pp. 1565–1596, 1977.
-a bandwidth limited signal can be reconstructed if the sampling frequency is more than double the maximum frequency meaning that frequencies up to almost 8kHz* are constituted correctly.
-Other part of preprocessing is to remove the parts between the recording starts and the user starts talking as well as after the end of speech.
-That helps to speed up the training phase because it reduces the size of training data*Reference*.
-%https://pdfs.semanticscholar.org/69da/b8bf2f729ed94f53a2dd5df03799258b34a8.pdf
+Adventegous preprocessing method is to downsample given speech signal.
+Speech is mostly recorded with a sampling frequency of 44.1kHz or 48kHz, although speech signal has frequency components in the audio frequency from 20Hz to 20kHz\cite{range_speech}.
+%http://iitg.vlab.co.in/?sub=59&brch=164&sim=474&cnt=1
+That's because of Nyquist-Shannon sampling Theorem \cite{shannon}, a time-continuous signal that is bandlimited to a certain finite frequency needs to be sampled with a double the maximum frequency.
+Since human speech has a relatively low bandwidth, mostly up to 8kHz.
+That means that sampling frequency of 16KHz is sufficient for speech recognition tasks\cite{speech_preprocessing}.
+%http://recognize-speech.com/preprocessing
 
-\imagefigurelarge{time_signal.jpg}{Illustration of raw speech signal from wav file with sampling frequency of 8kHz}
+Other part of preprocessing is to remove the parts between the recording starts and the user starts talking as well as after the end of speech.
+That helps to speed up the training phase because it reduces the size of training data.
+
+\imagefigurelarge{time_signal.jpg}{Illustration of raw speech signal from wav file with sampling frequency of 8kHz\cite{signal_raw}}
 %http://haythamfayek.com/2016/04/21/speech-processing-for-machine-learning.html
 
 \subsection{MFCC}
 
 Mel Frequency Cepstral Coefficents (MFCCs) are a feature widely used in speech recognition.
-They were introduced by Davis and Mermelstein in the 1980's, and have been state-of-the-art ever since.
+They were introduced by Davis and Mermelstein in the 1980's, and have been state-of-the-art ever since \cite{mfcc_intro}.
 %Steven B. Davis and Paul Mermelstein. Comparison of parametric represen- tations for monosyllabic word recognition in continuously spoken sentences. Acoustics, Speech and Signal Processing, IEEE Transactions on, 28(4):357– 366, 8 1980. ISSN 0096-3518. doi: 10.1109/TASSP.1980.1163420.
 
-MFCC mimics the logarithmic perception of loudness and pitch of human auditory system and tries to eliminate speaker dependent characteristics by excluding the fundamental frequency and their harmonics.
+MFCC mimics the logarithmic perception of loudness and pitch of human auditory system and tries to eliminate speaker dependent characteristics by excluding the fundamental frequency and their harmonics \cite{mfcc_what}.
 %http://recognize-speech.com/feature-extraction/mfcc
 
-\imagefigure{mfcc_diagram.png}{Steps of MFCC.}
+\imagefigure{mfcc_diagram.png}{Steps of MFCC \cite{mfcc_steps}}
 %https://www.researchgate.net/figure/Block-Diagram-of-MFCC_fig2_281684338
 
-To obtain MFFC features we have to follow operation steps as shown on *Figure*:
+To obtain MFCC features we have to follow operation steps as shown on Figure \ref{pic:mfcc_diagram.png}:
 
 \begin{itemize}
 	\item \textit{\textbf{Pre-Emphasis}} - This step applies filter on the speech signal to amplify the high frequencies. It balances the frequency spectrum and avoids numerical problems during the Fourier transform operation.
@@ -55,31 +59,29 @@ To obtain MFFC features we have to follow operation steps as shown on *Figure*:
 	\item \textit{\textbf{Framing}} - The process of segmenting the speech sinal into a small frames with the length within the range of 10 to 40 milliseconds.
   Speech is non-stationary signal but we consider all frames behave stationary so they describe a phonemes.
   In SR we process overlapping frames because phonemes can dependent, resulting to smoother changes in values.
-  Popular settings are 25 ms for the frame size, 10 ms stride (15 ms overlap)*Reference*.
+  Popular settings are 25 ms for the frame size, 10 ms stride (15 ms overlap) \cite{signal_raw}.
   %http://haythamfayek.com/2016/04/21/speech-processing-for-machine-learning.html
 
-  \item \textit{\textbf{Windowing}} - This step applies Hamming window function*Refrence* on each speech signal frame. This is common operation for sound signal before applying FFT.
-  *Refernce why* %http://download.ni.com/evaluation/pxi/Understanding%20FFTs%20and%20Windowing.pdf
+  \item \textit{\textbf{Windowing}} - This step applies Hamming window function\cite{windowing} on each speech signal frame. This is common operation for sound signal before applying FFT.
+  %http://download.ni.com/evaluation/pxi/Understanding%20FFTs%20and%20Windowing.pdf
 
-  \item \textit{\textbf{FFT}} - This step converts all speech frames from time domain into frequency domain using Fast Fourier Transform (FFT).*Reference FFT*
+  \item \textit{\textbf{FFT}} - This step converts all speech frames from time domain into frequency domain using Fast Fourier Transform (FFT) \cite{fft}.
 
   \item \textit{\textbf{Mel Filter Banks}} - This step applies the mel-filterbank which consists of triangular overlapping windows that are spread over the whole frequency range, outputing mel frequency spectrum.
-	It mimics the non-linear human ear perception of sound, these filters are more discriminative at lower frequencies and less discriminative at higher frequencies.
+	It mimics the non-linear human ear perception of sound, these filters are more discriminative at lower frequencies and less discriminative at higher frequencies \cite{mel_filter_banks}.
 	%https://arxiv.org/pdf/1712.06086.pdf
 
-  \item \textit{\textbf{Logarithm}} - This step computes the logarithm of the mel frequency spectrum, to mimic the human perception of loudness because perceive loudness on a logarithmic scale*Reference*.
-  %H. Niemann, Klassifikation von Mustern, 2nd ed. Berlin, New York, Tokyo: Springer, 2003.
+  \item \textit{\textbf{Logarithm}} - This step computes the logarithm of the mel frequency spectrum, to mimic the human perception of loudness because perceive loudness on a logarithmic scale.
 
-  \item \textit{\textbf{DCT}} - This step converts mel spectrum into time domain using Discrete Cosine Transform (DCT)*Reference*, resulting to MFCC vectors.
+  \item \textit{\textbf{DCT}} - This step converts mel spectrum into time domain using Discrete Cosine Transform (DCT)\cite{dcs}, resulting to MFCC vectors.
 
 \end{itemize}
-We have just given a theoretical overview how MFCC is calculated, for more detailed explenation consider reading *Reference MFCC explanation*.
+We have just given a theoretical overview how MFCC is calculated, for more detailed explenation consider reading \cite{mfcc_what}.
 %http://recognize-speech.com/feature-extraction/mfcc
-On *figure mfcc* is vector of MFCCs calculated from speech signal *figure signal* where number of cepstral coefficents is set to $13$.
+On Figure \ref{pic:mfcc_raw.jpg} is vector of MFCCs calculated from speech signal Figure \ref{pic:time_signal.jpg} where number of cepstral coefficents is set to $13$.
 We have extracted the features of speech signal and vectors of MFCCs can be feeded to recognizer.
 
 \imagefigurelarge{mfcc_raw.jpg}{Vector of Mel Frequency Cepstral Coefficents through time.}
-
 
 
 \section{Traditional Speech Recognizers}
@@ -92,51 +94,49 @@ where $X$ are acoustic vectors and transcribed $W^{*}$ word sequence.
 However, calculating directly $W^{*}$ is a very difficult task. We may simplify it by using Bayes rule resulting to equivalent equation
 \[ W^{*} = \argmax_W {P(X|W)P(W)} \]
 where the likelihood $P(X|W)$ is called the acoustic model and the prior $P(W)$ is the language model.
-%, and $P(X)$ is the observation. FOOTNOTE?
 \imagefigurelarge{traditional_sr.png}{Diagram of traditional speech recognizer}
 In traditional speech recognizers we don't form words directly but we concatenating phonemes which are basic building block of words and they are defined by pronunciation model.
-As shown on *Figure diagram*, the decoder block works with language, acoustic and pronunciation model.
-The language model has a word sequences probabilities, while the acoustic model is generated by Hidden Markov Model (HMM) which is a tool for representing probability distribution over sequences of phonemes using pronunciation model.
+As shown on Figure \ref{pic:traditional_sr.png}, the decoder block works with language, acoustic and pronunciation model.
+The language model has a word sequences probabilities, while the acoustic model is generated by Hidden Markov Model (HMM) which is a tool for representing probability distribution over sequences of phonemes using pronunciation model\cite{hmm_sr}.
 %http://recognize-speech.com/acoustic-model/hidden-markov-models
 %Gaussian mixture model (GMM) is responsible for emitting the probabilities of a phones given the acoustic vectors to an HMM model, which is responsible for modeling the possible transitions at each time step and allows the occurrence of multiple pronunciations (provided by the pronunciation model P(L|W )).
 
-In this thesis we just give a basic overview how traditional speech recognizers, our main focus is on end-to-end recognizers.
+In this thesis we just provide a basic overview how traditional speech recognizers, our main focus is on end-to-end recognizers.
 
 
 \section{End-to-End Speech Recognizers}
 
-Recent advances in algorithms and computer hardware have made it possible to train neural networks(*section*) in an end-to-end fashion for tasks that previously required significant human expertise.
-%http://proceedings.mlr.press/v32/graves14.pdf
+Recent advances in algorithms and computer hardware have made it possible to train neural networks in an end-to-end fashion for tasks that previously required significant human expertise.
 All of the state-of-the-art speech recognizers were HMM-based, they required pronunciation, acoustic and language model which were hand-engineered and trained separetly.
-Not only speech recognizers based on nerual networks networks require less human effort than traditional approaches, they generally deliver superior performance.
+Not only speech recognizers based on nerual networks networks require less human effort than traditional approaches, they generally deliver superior performance \cite{end-to-end}.
 %http://proceedings.mlr.press/v32/graves14.pdf
 Training independent components is complex and suboptimal compared to training all components as one.
-Because it replaces entire pipelines of hand-engineered components with neural networks, end-to-end learning allows us to handle a diverse variety of speech including noisy environments, accents and different languages.
+Because it replaces entire pipelines of hand-engineered components with neural networks, end-to-end learning allows us to handle a diverse variety of speech including noisy environments, accents and different languages\cite{end-to-end-mandarin}.
 %http://proceedings.mlr.press/v48/amodei16.pdf
 End-to-end speech recognizers simplifies the training and deployment process altogether.
 
 \subsection{Connectionist Temporal Classification}
 
-Connectionist Temporal Classification (CTC) were introduced in *section* a it is the best fit for end-to-end speech recognizer.
+Connectionist Temporal Classification (CTC) were introduced in \ref{ctc} a it is the best fit for end-to-end speech recognizer.
 Diagram on Figure \ref{pic:ctc_speech.png} shows overview of the model architeture.
 Speech can be interprted as time sequence, thus RNN with LSTM cells will be used since they are they are designed to deal with sequenctional data through time.
 The CTC make it possible to train RNNs for sequence labelling problems where the input-output alignment is unknown.
 
-\imagefigure{ctc_speech.png}{End-to-end speech recognizer diagram using CTC*Ref*}
+\imagefigure{ctc_speech.png}{End-to-end speech recognizer diagram using CTC \cite{ctc_pic}}
 %https://www.silversparro.com/single-post/2018/01/26/Making-CTCs-Deep-Learning-Function-work-for-Speech-Recognition
 
-For example, this type of speech recognition model is used in Google Voice Search on Android and iOS*ref*.
+For example, this type of speech recognition model is used in Google Voice Search on Android and iOS \cite{google_search}.
 %https://ai.googleblog.com/2015/09/google-voice-search-faster-and-more.html
 
 
 \subsection{Listen, Attend and Spell}
 
-Listen, Attend and Spell (LAS) is current state-of-the-art end-to-end speech recognizer *REF*.
+Listen, Attend and Spell (LAS) is current state-of-the-art end-to-end speech recognizer \cite{las}.
 %http://storage.googleapis.com/pub-tools-public-publication-data/pdf/74a8df45b9583e193e6cf8e156dfba9b73c33a0c.pdf
+
+It is based on
 
 It consists of an encoder recurrent neural network (RNN), which is named the listener, and a decoder RNN, which is named the speller.
 The listener is a pyramidal RNN that converts low level speech signals into higher level features.
 The speller is an RNN that converts these higher level features into output utterances by specifying a probability distribution over sequences of characters using the attention mechanism.
 The listener and the speller are trained jointly.
-
-*TODO*

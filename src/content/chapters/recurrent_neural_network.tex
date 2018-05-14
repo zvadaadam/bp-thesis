@@ -16,7 +16,7 @@ Basically, the recurrent edges or loops allow persistence of information from on
 
 \section{Evaluation}
 
-In *Figure 3.1.* we may see simplification of evaluation process of RNN through the time steps.
+In \ref{pic:rnn_unrolled.png} we may see simplification of evaluation process of RNN through the time steps.
 RNN's neuron cell in hidden layer takes two inputs, $x_t$ and $h_{t-1}$ which is value (hidden state) sent through the recurrent edge from previous time-step.
 The cell also produces two outputs, $h_t$ as hidden state for upcoming time-setp
 \[ h_t = f(W_{hx}x_t + W_{hh}h_{t-1} + b_h) \]
@@ -50,7 +50,7 @@ BPTT is basically an extended version of backpropagation algorithm where we not 
 We may think of it as unrolling the RNN to sequence of identical ANNs where the recurrent edge connects the sequences of neurons in hidden layer together as shown on Figure \ref{pic:rnn_unrolled.png} and \ref{pic:rnn_error.png}.
 On Figure 3.2 \ref{pic:rnn_error.png} is also indicated how the errors are propagated.
 The propagation of errors through hidden states allows the RNN to learn long term time dependencies.
-The calculated gradients of the loss function for defined parameter ($W$, $b$) through the sequence of unrolled RNN are then sum up, producing the final gradient for updating the weights or biases, *Equation bottom*.
+The calculated gradients of the loss function for defined parameter ($W$, $b$) through the sequence of unrolled RNN are then sum up, producing the final gradient for updating the weights or biases.
 \[ \pd{E}{W_ij^l} = \sum_{t=1}^{T}\pd{E_t}{W_ij^l} \]
 where $E$ is predefined loss function, ${W_{jk}^l}$ is weight with connection between unit $j$ in layer $l$ and unit $i$ in layer $l+1$, $T$ is number of input sequences and $\pd{E_t}{W_{ij}^l}$ is calculated similarly as in backpropagation with just considering existence of recurrent edges
 \[ \pd{E_t}{W_{ij}^l} = \sum_{k=1}^{t}\pd{E_t}{y_t}\pd{y_t}{h_t}\pd{h_t}{h_k}\pd{h_k}{W_{ij}^l} \]
@@ -130,6 +130,7 @@ The whole process of the LSTM cell evaluation is also illustrated on Figure \ref
 
 
 \section{Connectionist temporal classication}
+\label{ctc}
 
 Connectionist temporal classication (CTC) is a loss function used for classification of sequential data, initially presented by Alex Graves in 2006 \cite{ctc}.
 %http://www.cs.toronto.edu/~graves/icml_2006.pdf

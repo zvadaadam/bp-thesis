@@ -1,14 +1,14 @@
 \chapter{Implementation}
 
 The goal is to implement end-to-end speech recognizer using neural network.
-High-level concept, how the implemented speech recognition system works is illustrated on *figure*.
+High-level concept, how the implemented speech recognition system works is illustrated on Figure \ref{pic:prediction_diagram.pdf}.
 It takes a wav file as an input generated from given microphone and performs preprocessing and feature extraction.
 The data are feeded to the recognizer which outputs the prediction of transcribed text from speech.
 
 \imagefigurelarge{prediction_diagram.pdf}{Speech Recognition System}
 
 The implemented recognizer is build on recurrent neural networks, therefore they need to be trained, in order to make a successful predictions.
-On *figure 4.2* is shown how the recognizer is being trained.
+On Figure \ref{pic:learning_diagram.pdf} is shown how the recognizer is being trained.
 It's done by providing speech and transcribed text from the training dataset.
 RNN feed-forwards all the vectors of MFCC and the RNN's output are processed by CTC. Obtaining the prediction text of the speech signal.
 Using backpropagtion through time algorithm we update the weights and biases of RNN which minimize the error of the loss function resulting to better prediction in future.
@@ -116,7 +116,7 @@ For input is also created another placeholder of sequence length for each one on
 Output of network is represented by a sparse placeholder because it is required by TensorFlow's CTC.
 
 Second method \texttt{loss\_funtion} creates CTC loss function inside a computational graph.
-We use TensorFlow method \texttt{tf.nn.ctc\_loss} which takes input parameters as a label in sparse matrix format, logits*footnote* which is the last layer of the network and sequence length.
+We use TensorFlow method \texttt{tf.nn.ctc\_loss} which takes input parameters as a label in sparse matrix format, logits which is the last layer of the network and sequence length.
 The TensorFlow method also performs softmax operation upon the input before applying CTC loss.
 
 The third method is \texttt{train\_optimizer} is defines the used optimizer in the graph. Optimizer is performing some type of gradient descent algorithm to minimize the error on the loss function.
