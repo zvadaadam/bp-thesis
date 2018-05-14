@@ -1,34 +1,29 @@
 \chapter{Experiments}
 
 In this section we will review the speech recognizer performance.
-We will introduce some optimalization to increase the learning model accuracy and also by tweaking hyperparametrs of the network we can achive better results.
+We will introduce some optimization to increase the learning model accuracy and also by tweaking hyperparameters of the network we can achieve better results.
 
 \section{Computing Power}
 
-Training nerual networks could be considred as computationaly difficult problem.
+Training neural networks could be considered as computational difficult problem.
 However, with the right hardware we can speed up the process significantly.
-Backpropagtion algorithm is mostly about multiplying matrices and GPUs are explicitly designed to handle multiple matrix calculations at the same time, therefore it is highly recommanded to use GPUs for training nerual networks.
+Backpropagation algorithm is mostly about multiplying matrices and GPUs are explicitly designed to handle multiple matrix calculations at the same time, therefore it is highly recommended to use GPUs for training neural networks.
 
-Unfortunately, TensorFlow is just limited on using NVIDIA GPUs to properly work beause the python library \texttt{tensorflow-gpu} which handles the TensorFlow GPUs computaions is build upon CUDA toolkit.
+Unfortunately, TensorFlow is just limited on using NVIDIA GPUs to properly work because the python library \texttt{tensorflow-gpu} which handles the TensorFlow GPUs computations is build upon CUDA toolkit.
 Therefore, I will be using CPU for the experiments section as the main computational resource.
 Because it would not be possible to train speech recognizer on the whole \textit{VCTK dataset}, for the experiment part I will use \textit{Free Spoken Digit Dataset}.
 
-The final training of the speech recognizer using \textit{VCTK dataset} is done on \textit{Floyd Hub} which is commercial platform for cloud computing.
-
-\subsection{Floyd Hub}
-
-FloydHub is a Platform-as-a-Service for training and deploying deep learning models in the cloud.
-*TODO*
+The final training of the speech recognizer using \textit{VCTK dataset} is done on \textit{Floyd Hub} which is a commercial Platform-as-a-Service for training and deploying deep learning models in the cloud.
 
 \section{First training}
 
-The hyperparametrs of the first training the speech recognizer on \textit{Free Spoken Digit Dataset}:
+The hyperparameters of the first training the speech recognizer on \textit{Free Spoken Digit Dataset}:
 
 \begin{itemize}
-	\item numer of hidden neruons - 100
+	\item number of hidden neurons - 100
 	\item number of hidden layers - 1
 	\item batch size - 8
-	\item number of epoches - 150
+	\item number of epochs - 150
   \item learning rate - 0.001
 	\item dimension of acoustic vector - 13
 \end{itemize}
@@ -36,10 +31,37 @@ The hyperparametrs of the first training the speech recognizer on \textit{Free S
 \imagefigurelarge{LER_1.png}{Learning Error rate for *TODO*}
 
 Validation of the speech recognizer performance is evaluated using label error rate.
-On *Figure 5.1.*
-
-
+On Figure \ref{pic:LER_1.png} is shown how label error rate is decreasing though the training process.
+The final result with this configuration is *x\%* error on the \textit{Free Spoken Digit Dataset}.
 
 \section{Dropout}
 
-Optimalization of the learning model can be achived by introducing dropout method.
+Optimization of the learning model can be achieved by introducing dropout method.
+Simply, the dropout ignores random neurons in the layer by given probability value during a training phase.
+It majorly reduces overfitting on given dataset.
+
+We have applied the dropout to all RNN hidden layers with the dropout probability of $0.5$ which is considered as optimal in the study of *Ref*.
+%http://papers.nips.cc/paper/4878-understanding-dropout.pdf
+
+\section{Cached Extracted Features}
+
+Training of speech recognition is extremely time consuming, that is the reason why we cached the extracted features.
+
+In the initial stage of creating a computational TensorFlow graph, we perform preprocessing and feature extraction on all the given training dataset.
+The acoustic vectors and labels are stored as \textit{numpy} array in the dataset class.
+During a training phase, whenever \texttt{next\_batch} method is called, it retrieves a batch of preprocessed training data and no extra computation upon the data is required.
+The duration of training phase was reduced by $30\%$ on my personal computer. However, the speed up can certainly very on different hardware configurations.
+
+In TensorFlow, this approach is not considered the most efficient, because TensorFlow library provides \texttt{tf.data} module which can optimize the given training dataset for computational graph.
+
+\section{Deeper Network}
+
+*TODO*
+
+\section{BLSTM}
+
+*TODO*
+
+\section{Training on VCTK Corpus}
+
+*TODO*

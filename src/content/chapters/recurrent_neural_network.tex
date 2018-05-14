@@ -39,7 +39,7 @@ Training a RNN is similar to training a traditional ANN.
 We also use the backpropagation algorithm, but since the parameters are shared by all time-steps in the network, the gradient at each output depends not only on the calculations of the current time-step, but also the previous time-steps\cite{rnn_train}.
 %http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/
 
-\imagefigurelarge{rnn_error.png}{Deriving the gradients according to the back-propagation through time (BPTT) method. Notaion for output value $\epsilon(t)$ corresponds to our $y_t$\cite{rnn_gradients_flow}.}
+\imagefigurelarge{rnn_error.png}{Deriving the gradients according to the backpropagation through time (BPTT) method. Notaion for output value $\epsilon(t)$ corresponds to our $y_t$\cite{rnn_gradients_flow}.}
 %http://www.mdpi.com/2076-3417/8/4/630/htm
 
 \subsection{Backpropagation Through Time}
