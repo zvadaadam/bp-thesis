@@ -58,6 +58,8 @@
 
 \DeclareMathOperator*{\argmax}{argmax}
 
+
+
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % EDIT THIS
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -76,6 +78,9 @@ The proposed speech recognizer architecture is consisted from three main compone
 
 The result of this work is end-to-end speech recognizer trained on VCTK corpus and implemented in programming language Python, using deep learning library TensorFlow.}
 \abstractCS{
+  Cilem teto bakalarske prace je prozkoumat oblast rozpoznavani reci a neuronovych siti, s cile implemenotovat end-to-end rozpoznavani reci jako interface pro Robot NAO.
+
+  U
 	V n{\v e}kolika v{\v e}t{\' a}ch shr{\v n}te obsah a p{\v r}{\' i}nos t{\' e}to pr{\' a}ce v {\v c}esk{\' e}m jazyce.
 }
 \placeForDeclarationOfAuthenticity{Prague}
@@ -119,19 +124,20 @@ The result of this work is end-to-end speech recognizer trained on VCTK corpus a
 
 \chapter{Contents of enclosed CD}
 
-%change appropriately
-
 \begin{figure}
-	\dirtree{%
-		.1 readme.txt\DTcomment{the file with CD contents description}.
-		.1 exe\DTcomment{the directory with executables}.
-		.1 src\DTcomment{the directory of source codes}.
-		.2 wbdcm\DTcomment{implementation sources}.
-		.2 thesis\DTcomment{the directory of \LaTeX{} source codes of the thesis}.
-		.1 text\DTcomment{the thesis text directory}.
-		.2 thesis.pdf\DTcomment{the thesis text in PDF format}.
-		.2 thesis.ps\DTcomment{the thesis text in PS format}.
-	}
+  \dirtree{%
+        .1 .
+        .1 README.md            \DTcomment{the file contents description}.
+        .1 BP\_Adam\_Zvada.pdf  \DTcomment{the thesis text in PDF format}.
+        .1 bp\_text/            \DTcomment{the directory of the thesis}.
+        .1 speech-recognition/  \DTcomment{the directory of the speech recognizer}.
+        .2 src/                 \DTcomment{the directory of source codes for speech recognizer}.
+        .2 audio\_numbers/      \DTcomment{the directory of audio naumbers dataset}.
+        .2 trained\_models/     \DTcomment{the directory of pretrained models}.
+        .2 \_\_main\_\_.py/     \DTcomment{project python main}.
+        .2 requirements.py/     \DTcomment{python file with project requirements}.
+        .2 README.md/           \DTcomment{repozitář Piper CI web}.
+    }
 \end{figure}
 
 \end{document}

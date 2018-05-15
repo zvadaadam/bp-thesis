@@ -18,9 +18,9 @@ Basically, the recurrent edges or loops allow persistence of information from on
 
 In \ref{pic:rnn_unrolled.png} we may see simplification of evaluation process of RNN through the time steps.
 RNN's neuron cell in hidden layer takes two inputs, $x_t$ and $h_{t-1}$ which is value (hidden state) sent through the recurrent edge from previous time-step.
-The cell also produces two outputs, $h_t$ as hidden state for upcoming time-setp
+The cell also produces two outputs, $h_t$ as hidden state for upcoming time-step
 \[ h_t = f(W_{hx}x_t + W_{hh}h_{t-1} + b_h) \]
-where $f$ is arbitrary non-linear activation function, $W_{hx}$ is matrix of conventional weights, $W_{hh}$ is the matrix of recurrent weights and $b_h$ is a bais.
+where $f$ is arbitrary non-linear activation function, $W_{hx}$ is matrix of conventional weights, $W_{hh}$ is the matrix of recurrent weights and $b_h$ is a bias.
 The second output from cell is $y_t$ which outputs the predication using precalculated hidden state $h_t$,
 \[ y_t = W_{hy}h_t + b_y \]
 where $W_{hy}$ is matrix of output weights.
@@ -29,7 +29,7 @@ where $W_{hy}$ is matrix of output weights.
 It is very common for RNN models to use \textit{softmax} as activation function for output layer.
 Softmax function helps to get probability distribution of outputs so it's useful for finding most probable occurrence of output with respect to other outputs.
 \[ \operatorname{softmax}(y)_j = \frac{e^{z_j}}{\sum_{k=1}^K e^{z_k}}, \quad \text{for} \ j = 1, \ldots,  K \]
-Softmax is being used for calculting output value of $y_t$ resulting to formula
+Softmax is being used for calculating output value of $y_t$ resulting to formula
 \[ y_t = \operatorname{softmax}(W_{hy}h_t + b_y). \]
 
 
@@ -39,12 +39,12 @@ Training a RNN is similar to training a traditional ANN.
 We also use the backpropagation algorithm, but since the parameters are shared by all time-steps in the network, the gradient at each output depends not only on the calculations of the current time-step, but also the previous time-steps\cite{rnn_train}.
 %http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/
 
-\imagefigurelarge{rnn_error.png}{Deriving the gradients according to the backpropagation through time (BPTT) method. Notaion for output value $\epsilon(t)$ corresponds to our $y_t$\cite{rnn_gradients_flow}.}
+\imagefigurelarge{rnn_error.png}{Deriving the gradients according to the backpropagation through time (BPTT) method. Notation for output value $\epsilon(t)$ corresponds to our $y_t$\cite{rnn_gradients_flow}.}
 %http://www.mdpi.com/2076-3417/8/4/630/htm
 
 \subsection{Backpropagation Through Time}
 
-The most used algortihm to train RNN is \textit{backpropagation through time} (BPTT), introduced by Werbos in 1990 \cite{werbos_bptt}.
+The most used algorithm to train RNN is \textit{backpropagation through time} (BPTT), introduced by Werbos in 1990 \cite{werbos_bptt}.
 %http://axon.cs.byu.edu/~martinez/classes/678%20old/backproptime.pdf
 BPTT is basically an extended version of backpropagation algorithm where we not only propagate the error to all following layers but also through the hidden states.
 We may think of it as unrolling the RNN to sequence of identical ANNs where the recurrent edge connects the sequences of neurons in hidden layer together as shown on Figure \ref{pic:rnn_unrolled.png} and \ref{pic:rnn_error.png}.
@@ -67,8 +67,7 @@ That was mainly cause by problems of \textit{vanishing} and \textit{exploding gr
 %http://www.iro.umontreal.ca/~lisa/pointeurs/ieeetrnn94.pdf
 
 The exploding gradient problem occurs when backpropagating the error across many time steps, that could lead to exponentially grow of gradient for long-term components.
-Basically, a small change in parameters at initial stages can get accumulated through the time-steps resulting to the exponentially
- grow.
+Basically, a small change in parameters at initial stages can get accumulated through the time-steps resulting to the exponentially grow.
 The values of weights can become so large as to overflow and result in \textit{NaN} values.
 
 The vanishing gradient problem refers to opposite behavior when the gradient values are shrinking exponentially fast and eventually vanishing completely.
@@ -100,7 +99,7 @@ As shown on Figure \ref{pic:lstm_cell.png} we notice that LSTM is just more comp
 Similarly as basic RNN cell which propagates hidden state of $h_t$ to another time-step and also as cell output, the LSTM cell has extra state denoted as $c_t$ and called \textit{cell state} and it's just being propagated to another time-step.
 The cell state is more of a cell's memory.
 
-LSTM architeture follows stages during the evaluation where first we have to decide what information we want to get rid of from cell state, that is achived aplyting formula using sigmoid function
+LSTM architecture follows stages during the evaluation where first we have to decide what information we want to get rid of from cell state, that is achieved applying formula using sigmoid function
 \begin{equation} \label{eq:1}
   f_t = {\sigma}({W_f}{h_{t-1}} + {W_f}{x_t} + b_f)
 \end{equation}
@@ -129,17 +128,17 @@ where $o_t$ is called \textit{output gate} and it augments input information usi
 The whole process of the LSTM cell evaluation is also illustrated on Figure \ref{pic:lstm_cell.png}.
 
 
-\section{Connectionist temporal classication}
+\section{Connectionist temporal classification}
 \label{ctc}
 
-Connectionist temporal classication (CTC) is a loss function used for classification of sequential data, initially presented by Alex Graves in 2006 \cite{ctc}.
+Connectionist temporal classification (CTC) is a loss function used for classification of sequential data, initially presented by Alex Graves in 2006 \cite{ctc}.
 %http://www.cs.toronto.edu/~graves/icml_2006.pdf
 The idea of CTC is that the label is not generated directly by the RNN, but instead we calculate a probability distribution over all possible characters at every time-step.
 
 For a sequence labelling task where the labels are from an alphabet $L$, we introduce extra unit as \textit{blank} character, $\hat{L}=L\cup\{blank\}$.
 CTC consists of a softmax output layer which estimates the probabilities of observing the corresponding labels at particular times\cite{ctc_info}.
 
-Let's denote that ${y^t}_{k}$ of output unit $k$ at time-stap $t$ is interpreted as the probability of observing label $k$ at time $t$ and input sequence $x$ of length $T$.
+Let's denote that ${y^t}_{k}$ of output unit $k$ at time-step $t$ is interpreted as the probability of observing label $k$ at time $t$ and input sequence $x$ of length $T$.
 Now we can calculate a probability of path sentence $\pi\in\hat{L}$ using formula
 \begin{equation} \label{eq:7}
   p(\pi|x) = \prod_{t=1}^{T}y^{t}_{\pi_t}.
@@ -157,7 +156,7 @@ To decode the output for input sequence, we have to maximize the probability of 
 \begin{equation} \label{eq:9}
   h(x) = \argmax_l p(l|x)
 \end{equation}
-For efficent calculation of $p(l|x)$ we use \textit{backward-forward} algorithm with detail explenantion on \cite{ctc}.
+For efficent calculation of $p(l|x)$ we use \textit{backward-forward} algorithm with detail explanation on \cite{ctc}.
 
 To use CTC for RNN training, we have to define the loss function for the BPTT algorithm.
 CTC loss function is derived from the principle of maximum likelihood with formula
@@ -166,5 +165,5 @@ CTC loss function is derived from the principle of maximum likelihood with formu
 \end{equation}
 where $(x,z)$ are from the training dataset\cite{ctc_info}.
 
-%There are many aproches, we can make assumation that the most probable path corresponds to the most probable labelling which is easy to compute.
+%There are many approaches, we can make assumption that the most probable path corresponds to the most probable labelling which is easy to compute.
 %However, it can sometimes lead to errors a that is why \textit{prefix search decoding} methods are also used.

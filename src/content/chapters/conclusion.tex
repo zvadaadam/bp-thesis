@@ -2,14 +2,14 @@
 
 The goal of the thesis was to get familiar with the speech recognition field and implement speech recognizer using neural networks which would be used as voice-user interface on Robot NAO.
 
-We have covered the topics of artificial neural networks and recurrent neural network, and we explained how backpropagtion algorithm works during a training phase.
+We have covered the topics of artificial neural networks and recurrent neural network, and we explained how backpropagation algorithm works during a training phase.
 Afterwards we explored speech recognition architectures and explained how speech signals is modified for the purposes of speech recognition.
 
 The implemented solution of end-to-end speech recognizer is build upon recurrent neural networks with LSTM neurons, CTC loss function and speech signal features are extracted using MFCC.
-The recognizer was firstly trained on Free Spoken Digit Dataset where we achieved error rate of 5\%.
-We have tried to tweak the hyperparametrs for better performance and use dropout as optimization technique.
-We have successfully lowered the error rate on 3\%.
-The main end-to-end speech recognizer which will be used in Robot NAO, we have used VCTK Corpus as training dataset and achieved error rate of x\%.
+The recognizer was firstly trained on Free Spoken Digit Dataset where we achieved error rate of 3\% but the model was overfitted.
+We have tried to tweak the hyperparameters for better performance and use dropout as optimization technique against overfitted.
+We have successfully lowered the error rate on 2\%.
+The main end-to-end speech recognizer which will be used in Robot NAO, used VCTK Corpus as training dataset and achieved error rate of $3\%$.
 
 In future work we want to finish the integration of implemented speech recognition with Robot NAO and train the RNN on more complex speech corpus with deeper network.
-We would like to improve the recognizer by using bidirectional recurrent neural networks.
+We would like to improve the recognizer by using bidirectional recurrent neural networks and trained on large dataset with properly prepared validation and test data.

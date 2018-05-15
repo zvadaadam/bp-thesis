@@ -29,7 +29,7 @@ The greatest strength however is wide range of libraries and frameworks for ML a
 TensorFlow is open-source library developed by Google for deep learning and other algorithms involving large number of mathematical operations.
 The primary unit in TensorFlow is a tensor.
 A tensor consists of a set of primitive values shaped into an array of any number of dimensions.
-These massive numbers of large arrays are the reason that GPUs and other processors designed to do floating point mathematics excel at speeding up these algorithms. *Reference*
+These massive numbers of large arrays are the reason that GPUs and other processors designed to do floating point mathematics excel at speeding up these algorithms.
 % https://dzone.com/refcardz/introduction-to-tensorflow?chapter=1
 
 TensorFlow programs are structured into a construction phase that assembles a computational graph, and an execution phase that uses a session to execute operation in the graph.
@@ -53,7 +53,7 @@ One of the solution could be to prepare the data beforehand and store it as some
 \subsection{Numbers}
 
 Before using my learning model on large training dataset, I had been debugging and validating it on smaller dataset.
-I have used \texttt{Free Spoken Digit Dataset} from Github *reference*.
+I have used \texttt{Free Spoken Digit Dataset} from Github \cite{audio_dataset}.
 %https://github.com/Jakobovski/free-spoken-digit-dataset
 The dataset provides three english speakers with 1500 recordings, 50 recordings for each digit per speaker.
 
@@ -64,15 +64,16 @@ They are later used in \texttt{next\_batch} method.
 \subsection{VCTK Corpus}
 
 VCTK Corpus is training dataset which includes speech data uttered by 109 native speakers of English with various accents.
-Each speaker reads out about 400 sentences, most of which were selected from The Herald newspaper *regerence*.
+Each speaker reads out about 400 sentences, most of which were selected from The Herald newspaper \cite{vctk}.
 %http://homepages.inf.ed.ac.uk/jyamagis/page3/page58/page58.html
 Even though, this dataset was designed to maximize the contextual and phonetic coverage for HMM-based speech recognizers, we might as well use it for ANN-based speech recognizer.
 The dataset size is around 15GB which is still not enough to create robust production ready speech recognizer but it's enough for the purpose of this thesis.
 
 \section{Config Reader}
 
-To efficiently use different hyperparametrs, datasets or feature extraction configurations.
+To efficiently use different hyperparameters, datasets or feature extraction configurations.
 We run the speech recognizer training with \textit{YAML} configuration file.
+Class \texttt{ConfigReader} handles parsing of the \textit{YAML} file and as object it is passed to the main training method, where TensorFlow computational graphs is being constructed using the provided parameters from the object.
 
 
 
@@ -165,8 +166,9 @@ feed = {
 batch_cost, _ = session.run([loss_operation, optimizer_operation], feed)
 \end{lstlisting}
 
-TensorFlow also offers a way of restoring trained networks. During a training we may save checkpoint files with operations variables because \texttt{tf.Variable} maintains state in the graph across the computations.
-It's achieved by an object \texttt{tf.train.Saver()}, upon the object we either call method \texttt{save(session, checkpoint\_path)} or \texttt{restore(session, checkpoint\_path)}.
+TensorFlow also offers a way of restoring trained networks. During a training, we may save checkpoint files with operations variables because \texttt{tf.Variable} maintains state in the graph across the computations.
+It's achieved by an object \texttt{tf.train.Saver()}, we either call method \texttt{save(session, checkpoint\_path)} or \texttt{restore(session, checkpoint\_path)}.
+
 
 \section{Robot NAO}
 

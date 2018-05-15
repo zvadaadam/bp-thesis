@@ -15,25 +15,6 @@ Because it would not be possible to train speech recognizer on the whole \textit
 
 The final training of the speech recognizer using \textit{VCTK dataset} is done on \textit{Floyd Hub} which is a commercial Platform-as-a-Service for training and deploying deep learning models in the cloud.
 
-\section{First training}
-
-The hyperparameters of the first training the speech recognizer on \textit{Free Spoken Digit Dataset}:
-
-\begin{itemize}
-	\item number of hidden neurons - 100
-	\item number of hidden layers - 1
-	\item batch size - 8
-	\item number of epochs - 150
-  \item learning rate - 0.001
-	\item dimension of acoustic vector - 13
-\end{itemize}
-
-\imagefigurelarge{LER_1.png}{Learning Error rate for *TODO*}
-
-Validation of the speech recognizer performance is evaluated using label error rate.
-On Figure \ref{pic:LER_1.png} is shown how label error rate is decreasing though the training process.
-The final result with this configuration is *x\%* error on the \textit{Free Spoken Digit Dataset}.
-
 \section{Dropout}
 
 Optimization of the learning model can be achieved by introducing dropout method.
@@ -54,14 +35,106 @@ The duration of training phase was reduced by $30\%$ on my personal computer. Ho
 
 In TensorFlow, this approach is not considered the most efficient, because TensorFlow library provides \texttt{tf.data} module which can optimize the given training dataset for computational graph.
 
-\section{Deeper Network}
+\section{Training on Digits}
 
-*TODO*
+Training of the implemented speech recognizer on \textit{Free Spoken Digit Dataset} was first performed with the configuration of hyperparameters shown on Figure \ref{conf1}.
 
-\section{BLSTM}
+\begin{figure}
+	\centering
+	\begin{tabular}{ |l|l| }
+  	\hline
+  	\multicolumn{2}{|c|}{Hyperparameters} \\
+  	\hline
+  	number of hidden neurons & 100 \\
+  	number of hidden layers & 1 \\
+  	batch size & 8 \\
+  	number of epochs & 400 \\
+  	learning rate & 0.001 \\
+  	dimension of acoustic vector & 13 \\
+  	dropout & 1 (N/A) \\
+  	\hline
+	\end{tabular}
+	\caption{Configuration of hyperparameters} \label{conf1}
+\end{figure}
 
-*TODO*
+Validation of the speech recognizer performance is evaluated using label error rate which is the \textit{Levenshtein distance}, the minimum number of single-character edits.
+On Figure \ref{pic:LER_1.png} is shown how label error rate is decreasing though the training process.
+The final result error rate with the configuration \ref{conf1} is $3\%$.
+
+\imagefigurelarge{LER_1.png}{Learning Error rate on Digits for configuration on Figure \ref{conf1}}
+
+Unfortunately, the label error rate on Figure \ref{pic:LER_1.png} is calculated on the training data.
+The right approach would be to calculate the performance of the learning model on validation dataset.
+That is the reason why we get such a low error rate, the model is overfitted.
+
+To fight against overfitting, we will apply dropout method on new network configuration shown on Figure \ref{conf2}.
+\begin{figure}
+	\centering
+	\begin{tabular}{ |l|l| }
+  	\hline
+  	\multicolumn{2}{|c|}{Hyperparameters} \\
+  	\hline
+  	number of hidden neurons & 100 \\
+  	number of hidden layers & 2 \\
+  	batch size & 8 \\
+  	number of epochs & 400 \\
+  	learning rate & 0.001 \\
+  	dimension of acoustic vector & 13 \\
+  	dropout & 0.5 \\
+  	\hline
+	\end{tabular}
+	\caption{Configuration of hyperparameters} \label{conf2}
+\end{figure}
+We have added another hidden RNN layer and dropout with probability of $50\%$.
+Introducing another layer should improve the learning model performance, but our model was overfitted and dropout is constantly devaluating the performance.
+As shown on Figure \ref{pic:digit_two_layer_dropout_half.png}, the network error rate is around $5\%$ which is worse performance than the first trained model with just one hidden layer.
+
+This outcome could be expected because the the first model was overfitted and the second model was always devaluated by dropout.
+However, during the validation phase on learning model, the dropout has to be deactivated.
+Whenever we tried to run the second trained model without the dropout, we decreased the error rate from $5\%$ to $1.5\%$.
+Even running the model on validation dataset, we perform around $2\%$ error rate.
+
+\imagefigurelarge{digit_two_layer_dropout_half.png}{Learning Error rate on Digits for configuration on Figure \ref{conf2}}
 
 \section{Training on VCTK Corpus}
 
-*TODO*
+VCTK corpus was primarily created for HMM-based speech recognizers with hand picked sentences to contain all the phonemes.
+Unfortunately, without further exploration and deeper understanding of the VCTK corpus, we cannot simply created validation dataset using for example \texttt{train\_test\_split} method from \textit{sklearn} library which we used for the \textit{Free Spoken Digit Dataset}.
+Our workaround to the validation dataset problem is to instead of using different sentences, we will exchange the speakers.
+Even though, it is not ideal, we will verify if our speech recognizer is speaker independent.
+
+Training speech recognizer on whole VCTK Corpus would take a couple of days and that is why we are going to limit ourself on some fraction of it.
+We have trained the main learning model of the end-to-end speech recognizer on just three speakers and they will be changing during the process.
+We have empirically chosen these configuration of hyperparameters described on Figure \ref{conf3}.
+
+\begin{figure}
+	\centering
+	\begin{tabular}{ |l|l| }
+  	\hline
+  	\multicolumn{2}{|c|}{Hyperparameters} \\
+  	\hline
+  	number of hidden neurons & 100 \\
+  	number of hidden layers & 3 \\
+  	batch size & 64 \\
+  	number of epochs & 1000 \\
+  	learning rate & 0.001 \\
+  	dimension of acoustic vector & 13 \\
+  	dropout & 0.8 \\
+  	\hline
+	\end{tabular}
+	\caption{Configuration of hyperparameters} \label{conf3}
+\end{figure}
+
+On the Figure \ref{pic:vctk_3_1.png} is illustrated how label error rate was decreasing during a training process achieving as low as $5\%$.
+However, we have not exchanged the speakers so we could consider that speech recognizer is speaker dependent and dropout was set to just ignore $20\%$ of neurons so overfitting is highly possible.
+
+\imagefigurelarge{vctk_3_1.png}{Learning Error rate on VCTK for configuration on Figure \ref{conf3}}
+
+We have increased the dropout to $50\%$ and the label error rate spiked up to $23\%$ as shown of Figure \ref{pic:vctk_3_2.png}.
+Afterwards, we deactivated the dropout and label error rate immediately decreased from $11\%$ to $5\%$ as shown in the middle of Figure \ref{pic:vctk_3_2.png}.
+To validate if the data are overfitted, we started to exchange speakers and the dataset error rate was fluctuating around error rate of $3\%$.
+
+\imagefigurelarge{vctk_3_2.png}{Continuation of Learning Error rate on VCTK for configuration on Figure \ref{conf3} with dropout reduced to 0.5}
+
+Even though, it seems that recognizer is performing very well, we don't have the right validation data and that's why we cannot state the general recognizer performance.
+Also to use this the speech recognizer in day to day tasks, it needs to be trained on more complex dataset.
